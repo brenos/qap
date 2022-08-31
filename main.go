@@ -10,7 +10,7 @@ func main() {
 	conn := postgres.GetDbConnection()
 	defer conn.Close()
 
-	//postgres.RunMigrations()
+	postgres.RunMigrations()
 
 	userService := di.ConfigUserDI(conn)
 

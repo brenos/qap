@@ -7,6 +7,8 @@ import (
 
 	"github.com/brenos/qap/helpers"
 	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 )
 
@@ -22,7 +24,7 @@ func GetDbConnection() *sql.DB {
 // RunMigrations run scripts on path database/migrations
 func RunMigrations() {
 	databaseURL := helpers.URL_DB()
-	m, err := migrate.New("file://database/migrations", "pgx"+databaseURL)
+	m, err := migrate.New("file://migrations", databaseURL)
 	if err != nil {
 		log.Println(err)
 	}
