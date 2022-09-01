@@ -1,4 +1,4 @@
-package ports
+package userPorts
 
 import (
 	"github.com/gin-gonic/gin"
