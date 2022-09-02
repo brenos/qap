@@ -1,4 +1,4 @@
-package ports
+package userPorts
 
 import "github.com/brenos/qap/internal/core/domain"
 
