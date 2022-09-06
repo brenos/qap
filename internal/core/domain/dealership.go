@@ -8,6 +8,7 @@ type Dealership struct {
 	Address string `json:"address"`
 	State   string `json:"state"`
 	Country string `json:"country"`
+	Cars    []Car  `json:"cars"`
 }
 
 func NewDealership(id, name, address, state, country string) *Dealership {
@@ -17,6 +18,17 @@ func NewDealership(id, name, address, state, country string) *Dealership {
 		Address: address,
 		State:   state,
 		Country: country,
+	}
+}
+
+func NewDealership(id, name, address, state, country string, cars []Car) *Dealership {
+	return &Dealership{
+		ID:      id,
+		Name:    name,
+		Address: address,
+		State:   state,
+		Country: country,
+		Cars:    cars,
 	}
 }
 
