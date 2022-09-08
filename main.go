@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/brenos/qap/di"
 	"github.com/brenos/qap/internal/adapters/postgres"
+	"github.com/brenos/qap/internal/adapters/postgres/carrepository"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,7 +14,9 @@ func main() {
 	postgres.RunMigrations()
 
 	userService := di.ConfigUserDI(conn)
-	carService := di.ConfigCarDI(conn)
+	carRepository := carrepository.NewCarPostgreRepo(conn)
+	carService := di.ConfigCarDI(conn, carRepository)
+	dealershipService := di.ConfigDealershipDI(conn, carRepository)
 
 	r := gin.Default()
 
@@ -29,6 +32,9 @@ func main() {
 
 	carGroup := api.Group("/car")
 	carGroup.GET("/", carService.GetProxy)
+
+	dealershipGroup := api.Group("/dealership")
+	dealershipGroup.GET("/", dealershipService.GetProxy)
 
 	r.Run()
 }

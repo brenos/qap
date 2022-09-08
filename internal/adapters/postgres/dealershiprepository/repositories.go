@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/brenos/qap/internal/core/domain"
+	portsCar "github.com/brenos/qap/internal/core/ports/car"
 	ports "github.com/brenos/qap/internal/core/ports/dealership"
 )
 
@@ -16,6 +17,7 @@ type dealershipPostgre struct {
 	Address string
 	State   string
 	Country string
+	Cars    []domain.CleanCar
 }
 
 type dealershipListPostgre []dealershipPostgre
@@ -27,6 +29,7 @@ func (p *dealershipPostgre) ToDomain() *domain.Dealership {
 		Address: p.Address,
 		State:   p.State,
 		Country: p.Country,
+		Cars:    p.Cars,
 	}
 }
 
@@ -40,6 +43,7 @@ func (p *dealershipPostgre) FromDomain(dealership *domain.Dealership) {
 	p.Address = dealership.Name
 	p.State = dealership.State
 	p.Country = dealership.Country
+	p.Cars = dealership.Cars
 }
 
 func (p dealershipListPostgre) ToDomain() []domain.Dealership {
@@ -52,15 +56,53 @@ func (p dealershipListPostgre) ToDomain() []domain.Dealership {
 	return dealerships
 }
 
-type dealershipPostgreRepo struct {
-	db *sql.DB
-}
-
-func NewDealershipPostgreRepo(db *sql.DB) ports.DealershipRepository {
-	return &dealershipPostgreRepo{
-		db: db,
+func (p *dealershipPostgre) ToCleanDomain() *domain.CleanDealership {
+	return &domain.CleanDealership{
+		ID:      p.ID,
+		Name:    p.Name,
+		Address: p.Address,
+		State:   p.State,
+		Country: p.Country,
 	}
 }
+
+func (p *dealershipPostgre) FromCleanDomain(dealership *domain.CleanDealership) {
+	if p == nil {
+		p = &dealershipPostgre{}
+	}
+
+	p.ID = dealership.ID
+	p.Name = dealership.Name
+	p.Address = dealership.Name
+	p.State = dealership.State
+	p.Country = dealership.Country
+}
+
+func (p dealershipListPostgre) ToCleanDomain() []domain.CleanDealership {
+	dealerships := make([]domain.CleanDealership, len(p))
+	for k, dealershipIt := range p {
+		dealership := dealershipIt.ToCleanDomain()
+		dealerships[k] = *dealership
+	}
+
+	return dealerships
+}
+
+// Create class
+
+type dealershipPostgreRepo struct {
+	db            *sql.DB
+	carRepository portsCar.CarRepository
+}
+
+func NewDealershipPostgreRepo(db *sql.DB, carRepository portsCar.CarRepository) ports.DealershipRepository {
+	return &dealershipPostgreRepo{
+		db:            db,
+		carRepository: carRepository,
+	}
+}
+
+// Methods
 
 func (p *dealershipPostgreRepo) Get(id string) (*domain.Dealership, error) {
 	var dealership dealershipPostgre = dealershipPostgre{}
@@ -77,11 +119,12 @@ func (p *dealershipPostgreRepo) Get(id string) (*domain.Dealership, error) {
 	}
 
 	//GET DEALERSHIP
+	dealership.Cars, _ = p.carRepository.ListByDealership(dealership.ID)
 
 	return dealership.ToDomain(), nil
 }
 
-func (p *dealershipPostgreRepo) list(stmt string) ([]domain.Dealership, error) {
+func (p *dealershipPostgreRepo) list(stmt string) ([]domain.CleanDealership, error) {
 	var dealerships dealershipListPostgre
 
 	result, err := p.db.Query(stmt)
@@ -104,10 +147,10 @@ func (p *dealershipPostgreRepo) list(stmt string) ([]domain.Dealership, error) {
 		dealerships = append(dealerships, dealership)
 	}
 
-	return dealerships.ToDomain(), nil
+	return dealerships.ToCleanDomain(), nil
 }
 
-func (p *dealershipPostgreRepo) listByCountry(country string) ([]domain.Dealership, error) {
+func (p *dealershipPostgreRepo) listByCountry(country string) ([]domain.CleanDealership, error) {
 	if strings.TrimSpace(country) == "" {
 		return nil, errors.New("Country is empty")
 	}
@@ -116,7 +159,7 @@ func (p *dealershipPostgreRepo) listByCountry(country string) ([]domain.Dealersh
 	return p.list(stmt)
 }
 
-func (p *dealershipPostgreRepo) listByState(state string) ([]domain.Dealership, error) {
+func (p *dealershipPostgreRepo) listByState(state string) ([]domain.CleanDealership, error) {
 	if strings.TrimSpace(state) == "" {
 		return nil, errors.New("State is empty")
 	}
@@ -125,12 +168,12 @@ func (p *dealershipPostgreRepo) listByState(state string) ([]domain.Dealership, 
 	return p.list(stmt)
 }
 
-func (p *dealershipPostgreRepo) List() ([]domain.Dealership, error) {
+func (p *dealershipPostgreRepo) List() ([]domain.CleanDealership, error) {
 	stmt := fmt.Sprintf("SELECT id, \"name\", address, state, country FROM dealerships")
 	return p.list(stmt)
 }
 
-func (p *dealershipPostgreRepo) ListByCountryAndState(country, state string) ([]domain.Dealership, error) {
+func (p *dealershipPostgreRepo) ListByCountryAndState(country, state string) ([]domain.CleanDealership, error) {
 	countryToCompate := strings.TrimSpace(country)
 	stateToCompare := strings.TrimSpace(state)
 	if countryToCompate == "" && stateToCompare == "" {

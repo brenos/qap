@@ -2,7 +2,6 @@ package carservice
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,23 +11,17 @@ func (service service) GetProxy(c *gin.Context) {
 	idDealership := c.Request.URL.Query().Get("idDealership")
 	brand := c.Request.URL.Query().Get("brand")
 	model := c.Request.URL.Query().Get("model")
-	isGetDealershipParam := c.Request.URL.Query().Get("isGetDealership")
-	isGetDealership, err := strconv.ParseBool(isGetDealershipParam)
-
-	if err != nil {
-		isGetDealership = false
-	}
 
 	if id != "" {
-		service.get(c, id, isGetDealership)
+		service.get(c, id)
 	} else if idDealership != "" {
-		service.listByDealership(c, idDealership, isGetDealership)
+		service.listByDealership(c, idDealership)
 	} else if model != "" || brand != "" {
-		service.listByBrandAndOrModel(c, brand, model, isGetDealership)
+		service.listByBrandAndOrModel(c, brand, model)
 	}
 }
 
-func (service service) get(c *gin.Context, id string, isGetDealership bool) {
+func (service service) get(c *gin.Context, id string) {
 	if id == "" {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"message": "ID required",
@@ -46,7 +39,7 @@ func (service service) get(c *gin.Context, id string, isGetDealership bool) {
 	c.IndentedJSON(http.StatusOK, car)
 }
 
-func (service service) listByDealership(c *gin.Context, idDealership string, isGetDealership bool) {
+func (service service) listByDealership(c *gin.Context, idDealership string) {
 	if idDealership == "" {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "idDealership id empty",
@@ -63,7 +56,7 @@ func (service service) listByDealership(c *gin.Context, idDealership string, isG
 	c.IndentedJSON(http.StatusOK, cars)
 }
 
-func (service service) listByBrandAndOrModel(c *gin.Context, brand, model string, isGetDealership bool) {
+func (service service) listByBrandAndOrModel(c *gin.Context, brand, model string) {
 	if brand == "" && model == "" {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "Brand or Model is empty",

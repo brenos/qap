@@ -27,7 +27,7 @@ func (d *dealershipUseCase) Get(id string) (*domain.Dealership, error) {
 	return dealership, nil
 }
 
-func (d *dealershipUseCase) List() ([]domain.Dealership, error) {
+func (d *dealershipUseCase) List() ([]domain.CleanDealership, error) {
 	dealerships, err := d.dealershipRepo.List()
 	if err != nil {
 		log.Panicf("Error getting dealerships from repo - %s", err)
@@ -36,7 +36,7 @@ func (d *dealershipUseCase) List() ([]domain.Dealership, error) {
 	return dealerships, nil
 }
 
-func (d *dealershipUseCase) ListByCountryAndOrState(country, state string) ([]domain.Dealership, error) {
+func (d *dealershipUseCase) ListByCountryAndOrState(country, state string) ([]domain.CleanDealership, error) {
 	dealerships, err := d.dealershipRepo.ListByCountryAndState(country, state)
 	if err != nil {
 		log.Panicf("Error getting dealerships by country %s and state %s from repo - %s", country, state, err)
@@ -47,7 +47,7 @@ func (d *dealershipUseCase) ListByCountryAndOrState(country, state string) ([]do
 
 func (d *dealershipUseCase) Create(dealershipRequest *domain.CreateDealershipRequest) (*domain.Dealership, error) {
 	var dealershipId = helpers.RandomUUIDAsString()
-	newDealership := domain.NewDealershipWithoutCars(dealershipId, dealershipRequest.Name, dealershipRequest.Address, dealershipRequest.State, dealershipRequest.Country)
+	newDealership := domain.NewDealership(dealershipId, dealershipRequest.Name, dealershipRequest.Address, dealershipRequest.State, dealershipRequest.Country)
 
 	_, err := d.dealershipRepo.Create(newDealership)
 	if err != nil {
