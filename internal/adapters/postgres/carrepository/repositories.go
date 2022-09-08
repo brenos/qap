@@ -61,6 +61,42 @@ func (p carListPostgre) ToDomain() []domain.Car {
 	return cars
 }
 
+func (p *carPostgre) ToCleanDomain() *domain.CleanCar {
+	return &domain.CleanCar{
+		ID:       p.ID,
+		Brand:    p.Brand,
+		Model:    p.Model,
+		FuelType: p.FuelType,
+		Year:     p.Year,
+		Price:    p.Price,
+	}
+}
+
+func (p *carPostgre) FromCleanDomain(car *domain.CleanCar) {
+	if p == nil {
+		p = &carPostgre{}
+	}
+
+	p.ID = car.ID
+	p.Brand = car.Brand
+	p.Model = car.Model
+	p.FuelType = car.FuelType
+	p.Year = car.Year
+	p.Price = car.Price
+}
+
+func (p carListPostgre) ToCleanDomain() []domain.CleanCar {
+	cars := make([]domain.CleanCar, len(p))
+	for k, carIt := range p {
+		car := carIt.ToCleanDomain()
+		cars[k] = *car
+	}
+
+	return cars
+}
+
+// Create repository
+
 type carPostgreRepo struct {
 	db *sql.DB
 }
@@ -70,6 +106,8 @@ func NewCarPostgreRepo(db *sql.DB) ports.CarRepository {
 		db: db,
 	}
 }
+
+// Methods
 
 func (p *carPostgreRepo) Get(id string) (*domain.Car, error) {
 	var car carPostgre = carPostgre{}
@@ -109,6 +147,7 @@ func (p *carPostgreRepo) list(stmt string) ([]domain.Car, error) {
 		err := result.Scan(&car.ID, &car.Brand, &car.Model, &car.FuelType, &car.Year, &car.Price,
 			&car.IdDealerShip, &car.Dealership.ID, &car.Dealership.Name, &car.Dealership.Address,
 			&car.Dealership.State, &car.Dealership.Country)
+
 		if err != nil {
 			return nil, err
 		}
@@ -119,14 +158,41 @@ func (p *carPostgreRepo) list(stmt string) ([]domain.Car, error) {
 	return cars.ToDomain(), nil
 }
 
-func (p *carPostgreRepo) ListByDealership(idDealership string) ([]domain.Car, error) {
+func (p *carPostgreRepo) listClean(stmt string) ([]domain.CleanCar, error) {
+	var cars carListPostgre
+
+	result, err := p.db.Query(stmt)
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Err() != nil {
+		return nil, result.Err()
+	}
+
+	for result.Next() {
+		car := carPostgre{}
+
+		err := result.Scan(&car.ID, &car.Brand, &car.Model, &car.FuelType, &car.Year, &car.Price)
+
+		if err != nil {
+			return nil, err
+		}
+
+		cars = append(cars, car)
+	}
+
+	return cars.ToCleanDomain(), nil
+}
+
+func (p *carPostgreRepo) ListByDealership(idDealership string) ([]domain.CleanCar, error) {
 	if strings.TrimSpace(idDealership) == "" {
 		return nil, errors.New("Dealership ID is empty")
 	}
 
-	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
-		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.iddealership like '%s'", idDealership)
-	return p.list(stmt)
+	stmt := fmt.Sprintf("SELECT id, brand, model, fueltype, \"year\", price "+
+		"FROM cars WHERE iddealership like '%s'", idDealership)
+	return p.listClean(stmt)
 }
 
 func (p *carPostgreRepo) listByBrand(brand string) ([]domain.Car, error) {
