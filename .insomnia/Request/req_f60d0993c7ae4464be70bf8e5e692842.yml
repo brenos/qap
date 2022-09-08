@@ -1,0 +1,21 @@
+_id: req_f60d0993c7ae4464be70bf8e5e692842
+type: Request
+parentId: fld_87bf7542f70d4b3383df0542b5b32147
+modified: 1662658300288
+created: 1662658217179
+url: "{{ _.url }}/api/dealership"
+name: Get Dealerships
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1662642894089
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

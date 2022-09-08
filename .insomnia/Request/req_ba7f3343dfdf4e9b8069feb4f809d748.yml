@@ -1,0 +1,26 @@
+_id: req_ba7f3343dfdf4e9b8069feb4f809d748
+type: Request
+parentId: fld_87bf7542f70d4b3383df0542b5b32147
+modified: 1662658275289
+created: 1662658217148
+url: "{{ _.url }}/api/dealership"
+name: Get Dealership By ID
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_ccffd2911c51403ab2821a4b12ecb469
+    name: id
+    value: 98DE1CB4-D881-1BA6-86AD-665CEB2186E8
+    description: ""
+    disabled: false
+headers: []
+authentication: {}
+metaSortKey: -1662642894139
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
