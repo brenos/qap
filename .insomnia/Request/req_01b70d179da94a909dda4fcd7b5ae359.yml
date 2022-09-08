@@ -1,0 +1,30 @@
+_id: req_01b70d179da94a909dda4fcd7b5ae359
+type: Request
+parentId: fld_ff6963ff2d3b4ed0b0b2b9e8a0605eca
+modified: 1662647877582
+created: 1662645310916
+url: "{{ _.url }}/api/car"
+name: Get Cars By Brand Or Model
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_5e3b72bc01874038935f3c75dd0a46f3
+    name: brand
+    value: Ford
+    description: ""
+  - id: pair_fb4014ff486444b6af049ed1b2ab24a8
+    name: model
+    value: Explorer
+    description: ""
+    disabled: false
+headers: []
+authentication: {}
+metaSortKey: -1662642894039
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

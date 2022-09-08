@@ -1,0 +1,25 @@
+_id: req_9d84a1f5a4b740db98005a0fb2fed274
+type: Request
+parentId: fld_ff6963ff2d3b4ed0b0b2b9e8a0605eca
+modified: 1662647907432
+created: 1662645310913
+url: "{{ _.url }}/api/car"
+name: Get Cars By ID Dealership
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_8153b80fa7a4417f838bc97d8d8204ed
+    name: idDealership
+    value: 8B87C465-3215-2235-219C-F66467248B8F
+    description: ""
+headers: []
+authentication: {}
+metaSortKey: -1662642894089
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

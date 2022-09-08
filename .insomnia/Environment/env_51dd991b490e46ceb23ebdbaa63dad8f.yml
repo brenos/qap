@@ -1,0 +1,14 @@
+_id: env_51dd991b490e46ceb23ebdbaa63dad8f
+type: Environment
+parentId: env_b6eafa25159b9fe35ad6c2abebfcc4f39683d7cf
+modified: 1662647769349
+created: 1662647721989
+name: Heroku
+data:
+  url: https://qap-ws.herokuapp.com
+dataPropertyOrder:
+  "&":
+    - url
+color: "#7d69cb"
+isPrivate: false
+metaSortKey: 1662647721989

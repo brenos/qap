@@ -1,0 +1,26 @@
+_id: req_059a5b99749e4427a013569837372a56
+type: Request
+parentId: wrk_6b2637b6589f48ecb7d1044aa2aef9b0
+modified: 1662647980448
+created: 1662645953908
+url: "{{ _.url }}/api/liveness"
+name: Liveness
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_ccffd2911c51403ab2821a4b12ecb469
+    name: id
+    value: 8f997cbc-e4c4-4350-b150-63a9fd3ae1ee
+    description: ""
+    disabled: true
+headers: []
+authentication: {}
+metaSortKey: -1662642884622
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

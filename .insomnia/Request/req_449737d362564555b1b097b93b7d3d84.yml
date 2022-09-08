@@ -1,0 +1,26 @@
+_id: req_449737d362564555b1b097b93b7d3d84
+type: Request
+parentId: fld_ff6963ff2d3b4ed0b0b2b9e8a0605eca
+modified: 1662647913654
+created: 1662645310911
+url: "{{ _.url }}/api/car"
+name: Get Car By ID
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_ccffd2911c51403ab2821a4b12ecb469
+    name: id
+    value: 8f997cbc-e4c4-4350-b150-63a9fd3ae1ee
+    description: ""
+    disabled: false
+headers: []
+authentication: {}
+metaSortKey: -1662642894139
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
