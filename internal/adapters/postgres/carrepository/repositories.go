@@ -18,6 +18,7 @@ type carPostgre struct {
 	Year         float32
 	Price        float32
 	IdDealerShip string
+	Dealership   domain.Dealership
 }
 
 type carListPostgre []carPostgre
@@ -31,6 +32,7 @@ func (p *carPostgre) ToDomain() *domain.Car {
 		Year:         p.Year,
 		Price:        p.Price,
 		IdDealerShip: p.IdDealerShip,
+		Dealership:   p.Dealership,
 	}
 }
 
@@ -46,6 +48,7 @@ func (p *carPostgre) FromDomain(car *domain.Car) {
 	p.Year = car.Year
 	p.Price = car.Price
 	p.IdDealerShip = car.IdDealerShip
+	p.Dealership = car.Dealership
 }
 
 func (p carListPostgre) ToDomain() []domain.Car {
@@ -70,19 +73,20 @@ func NewCarPostgreRepo(db *sql.DB) ports.CarRepository {
 
 func (p *carPostgreRepo) Get(id string) (*domain.Car, error) {
 	var car carPostgre = carPostgre{}
-	stmt := fmt.Sprintf("SELECT id, brand, model, fueltype, \"year\", price, iddealership FROM cars WHERE id = '%s'", id)
+	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.id = '%s'", id)
 
 	result := p.db.QueryRow(stmt)
 	if result.Err() != nil {
 		return nil, result.Err()
 	}
 
-	err := result.Scan(&car.ID, &car.Brand, &car.Model, &car.FuelType, &car.Year, &car.Price, &car.IdDealerShip)
+	err := result.Scan(&car.ID, &car.Brand, &car.Model, &car.FuelType, &car.Year, &car.Price,
+		&car.IdDealerShip, &car.Dealership.ID, &car.Dealership.Name, &car.Dealership.Address,
+		&car.Dealership.State, &car.Dealership.Country)
 	if err != nil {
 		return nil, err
 	}
-
-	//GET DEALERSHIP
 
 	return car.ToDomain(), nil
 }
@@ -102,7 +106,9 @@ func (p *carPostgreRepo) list(stmt string) ([]domain.Car, error) {
 	for result.Next() {
 		car := carPostgre{}
 
-		err := result.Scan(&car.ID, &car.Brand, &car.Model, &car.FuelType, &car.Year, &car.Price, &car.IdDealerShip)
+		err := result.Scan(&car.ID, &car.Brand, &car.Model, &car.FuelType, &car.Year, &car.Price,
+			&car.IdDealerShip, &car.Dealership.ID, &car.Dealership.Name, &car.Dealership.Address,
+			&car.Dealership.State, &car.Dealership.Country)
 		if err != nil {
 			return nil, err
 		}
@@ -118,7 +124,8 @@ func (p *carPostgreRepo) ListByDealership(idDealership string) ([]domain.Car, er
 		return nil, errors.New("Dealership ID is empty")
 	}
 
-	stmt := fmt.Sprintf("SELECT id, brand, model, fueltype, \"year\", price, iddealership FROM cars WHERE iddealership like '%s'", idDealership)
+	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.iddealership like '%s'", idDealership)
 	return p.list(stmt)
 }
 
@@ -127,7 +134,8 @@ func (p *carPostgreRepo) listByBrand(brand string) ([]domain.Car, error) {
 		return nil, errors.New("Brand is empty")
 	}
 
-	stmt := fmt.Sprintf("SELECT id, brand, model, fueltype, \"year\", price, iddealership FROM cars WHERE brand like '%s'", brand)
+	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.brand like '%s'", brand)
 	return p.list(stmt)
 }
 
@@ -136,7 +144,8 @@ func (p *carPostgreRepo) listByModel(model string) ([]domain.Car, error) {
 		return nil, errors.New("Model is empty")
 	}
 
-	stmt := fmt.Sprintf("SELECT id, brand, model, fueltype, \"year\", price, iddealership FROM cars WHERE model like '%s'", model)
+	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.model like '%s'", model)
 	return p.list(stmt)
 }
 
@@ -154,7 +163,8 @@ func (p *carPostgreRepo) ListByBrandAndOrModel(brand, model string) ([]domain.Ca
 		return p.listByModel(model)
 	}
 
-	stmt := fmt.Sprintf("SELECT id, brand, model, fueltype, \"year\", price, iddealership FROM cars WHERE model like '%s' AND brand like '%s", model, brand)
+	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.model like '%s' AND c.brand like '%s'", model, brand)
 	return p.list(stmt)
 }
 

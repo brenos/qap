@@ -11,7 +11,7 @@ type Car struct {
 	Dealership   Dealership `json:"dealership"`
 }
 
-func NewCar(id, brand, model, fuelType, idDealership string, year, price float32) *Car {
+func NewCarWithoutDealership(id, brand, model, fuelType, idDealership string, year, price float32) *Car {
 	return &Car{
 		ID:           id,
 		Brand:        brand,
@@ -23,14 +23,15 @@ func NewCar(id, brand, model, fuelType, idDealership string, year, price float32
 	}
 }
 
-func NewCar(id, brand, model, fuelType string, year, price float32, dealership Dealership) *Car {
+func NewCar(id, brand, model, fuelType, idDealership string, year, price float32, dealership Dealership) *Car {
 	return &Car{
-		ID:         id,
-		Brand:      brand,
-		Model:      model,
-		FuelType:   fuelType,
-		Year:       year,
-		Price:      price,
-		Dealership: dealership,
+		ID:           id,
+		Brand:        brand,
+		Model:        model,
+		FuelType:     fuelType,
+		Year:         year,
+		Price:        price,
+		IdDealerShip: idDealership,
+		Dealership:   dealership,
 	}
 }

@@ -11,7 +11,7 @@ type Dealership struct {
 	Cars    []Car  `json:"cars"`
 }
 
-func NewDealership(id, name, address, state, country string) *Dealership {
+func NewDealershipWithoutCars(id, name, address, state, country string) *Dealership {
 	return &Dealership{
 		ID:      id,
 		Name:    name,
@@ -33,5 +33,5 @@ func NewDealership(id, name, address, state, country string, cars []Car) *Dealer
 }
 
 func (d *Dealership) String() string {
-	return fmt.Sprintf("%s - %s - %s - %s - %s", d.ID, d.Name, d.Address, d.State, d.Country)
+	return fmt.Sprintf("%s - %s - %s - %s - %s - Cars: %d", d.ID, d.Name, d.Address, d.State, d.Country, len(d.Cars))
 }

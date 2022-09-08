@@ -13,6 +13,7 @@ func main() {
 	postgres.RunMigrations()
 
 	userService := di.ConfigUserDI(conn)
+	carService := di.ConfigCarDI(conn)
 
 	r := gin.Default()
 
@@ -25,6 +26,9 @@ func main() {
 
 	userGroup := api.Group("/user")
 	userGroup.GET("/:id", userService.Get)
+
+	carGroup := api.Group("/car")
+	carGroup.GET("/", carService.GetProxy)
 
 	r.Run()
 }

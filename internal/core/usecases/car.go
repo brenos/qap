@@ -36,32 +36,7 @@ func (c *carUseCase) ListByDealership(idDealership string) ([]domain.Car, error)
 	return cars, nil
 }
 
-func (c *carUseCase) ListByBrand(brand string) ([]domain.Car, error) {
-	cars, err := c.carRepo.ListByBrand(brand)
-	if err != nil {
-		log.Panicf("Error getting cars by brand %s from repo - %s", brand, err)
-		return nil, err
-	}
-	return cars, nil
-}
-
-func (c *carUseCase) ListByModel(model string) ([]domain.Car, error) {
-	cars, err := c.carRepo.ListByModel(model)
-	if err != nil {
-		log.Panicf("Error getting cars by model %s from repo - %s", model, err)
-		return nil, err
-	}
-	return cars, nil
-}
-
 func (c *carUseCase) ListByBrandAndOrModel(brand, model string) ([]domain.Car, error) {
-	if brand == "" {
-		return this.ListByModel(model)
-	}
-	if model == "" {
-		return this.ListByBrand(brand)
-	}
-
 	cars, err := c.carRepo.ListByBrandAndOrModel(brand, model)
 	if err != nil {
 		log.Panicf("Error getting cars by brand %s and model %s from repo - %s", brand, model, err)
@@ -72,7 +47,7 @@ func (c *carUseCase) ListByBrandAndOrModel(brand, model string) ([]domain.Car, e
 
 func (c *carUseCase) Create(carDto *domain.CreateCarRequest) (*domain.Car, error) {
 	var carId = helpers.RandomUUIDAsString()
-	newCar := domain.NewCar(carId, carDto.Brand, carDto.Model, carDto.FuelType, carDto.IdDealerShip, carDto.Year, carDto.Price)
+	newCar := domain.NewCarWithoutDealership(carId, carDto.Brand, carDto.Model, carDto.FuelType, carDto.IdDealerShip, carDto.Year, carDto.Price)
 
 	_, err := c.carRepo.Create(newCar)
 	if err != nil {
