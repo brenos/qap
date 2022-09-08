@@ -7,7 +7,6 @@ import (
 type DealershipService interface {
 	Get(c *gin.Context)
 	List(c *gin.Context)
-	ListByState(c *gin.Context)
-	ListByCountry(c *gin.Context)
+	ListByCountryAndOrState(c *gin.Context)
 	Create(c *gin.Context)
 }
