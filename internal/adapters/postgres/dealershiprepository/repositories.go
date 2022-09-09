@@ -192,8 +192,7 @@ func (p *dealershipPostgreRepo) ListByCountryAndState(country, state string) ([]
 }
 
 func (p *dealershipPostgreRepo) Create(newDealership *domain.Dealership) error {
-	stmt := "INSERT INTO dealerships (id, name, address, state, country) " +
-		"VALUES(?, ?, ?, ?, ?)"
+	stmt := "INSERT INTO dealerships (id, \"name\", address, state, country) VALUES ($1, $2, $3, $4, $5)"
 
 	_, err := p.db.Exec(stmt, newDealership.ID, newDealership.Name, newDealership.Address, newDealership.State, newDealership.Country)
 
@@ -207,7 +206,7 @@ func (p *dealershipPostgreRepo) Update(dealership *domain.Dealership) error {
 		return errGet
 	}
 
-	stmt := "UPDATE dealerships SET name=?, address=?, state=?, country=? WHERE id=?"
+	stmt := "UPDATE dealerships SET name=$1, address=$2, state=$3, country=$4 WHERE id=$5"
 
 	_, err := p.db.Exec(stmt, dealership.Name, dealership.Address, dealership.State, dealership.Country, dealership.ID)
 
@@ -221,7 +220,7 @@ func (p *dealershipPostgreRepo) Delete(id string) error {
 		return errGet
 	}
 
-	stmt := "DELETE dealerships WHERE id=?"
+	stmt := "DELETE FROM dealerships WHERE id=$1"
 
 	_, err := p.db.Exec(stmt, id)
 

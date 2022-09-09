@@ -236,7 +236,7 @@ func (p *carPostgreRepo) ListByBrandAndOrModel(brand, model string) ([]domain.Ca
 
 func (p *carPostgreRepo) Create(newCar *domain.Car) error {
 	stmt := "INSERT INTO cars (id, brand, model, fueltype, \"year\", price, iddealership) " +
-		"VALUES(?, ?, ?, ?, ?, ?, ?)"
+		"VALUES($1, $2, $3, $4, $5, $6, $7)"
 
 	_, err := p.db.Exec(stmt, newCar.ID, newCar.Brand, newCar.Model, newCar.FuelType, newCar.Year, newCar.Price, newCar.IdDealerShip)
 
@@ -250,7 +250,7 @@ func (p *carPostgreRepo) Update(car *domain.Car) error {
 		return errGet
 	}
 
-	stmt := "UPDATE cars SET brand=?, model=?, fueltype=?, \"year\"=?, price=?, iddealership=? WHERE id=?"
+	stmt := "UPDATE cars SET brand=$1, model=$2, fueltype=$3, \"year\"=$4, price=$5, iddealership=$6 WHERE id=$7"
 
 	_, err := p.db.Exec(stmt, car.Brand, car.Model, car.FuelType, car.Year, car.Price, car.IdDealerShip, car.ID)
 
@@ -264,7 +264,7 @@ func (p *carPostgreRepo) Delete(id string) error {
 		return errGet
 	}
 
-	stmt := "DELETE cars WHERE id=?"
+	stmt := "DELETE FROM cars WHERE id=$1"
 
 	_, err := p.db.Exec(stmt, id)
 
