@@ -191,14 +191,39 @@ func (p *dealershipPostgreRepo) ListByCountryAndState(country, state string) ([]
 	return p.list(stmt)
 }
 
-func (p *dealershipPostgreRepo) Create(newDealership *domain.Dealership) (*domain.Dealership, error) {
+func (p *dealershipPostgreRepo) Create(newDealership *domain.Dealership) error {
 	stmt := "INSERT INTO dealerships (id, name, address, state, country) " +
 		"VALUES(?, ?, ?, ?, ?)"
+
 	_, err := p.db.Exec(stmt, newDealership.ID, newDealership.Name, newDealership.Address, newDealership.State, newDealership.Country)
 
-	if err != nil {
-		return nil, err
+	return err
+}
+
+func (p *dealershipPostgreRepo) Update(dealership *domain.Dealership) error {
+	_, errGet := p.Get(dealership.ID)
+
+	if errGet != nil {
+		return errGet
 	}
 
-	return newDealership, nil
+	stmt := "UPDATE dealerships SET name=?, address=?, state=?, country=? WHERE id=?"
+
+	_, err := p.db.Exec(stmt, dealership.Name, dealership.Address, dealership.State, dealership.Country, dealership.ID)
+
+	return err
+}
+
+func (p *dealershipPostgreRepo) Delete(id string) error {
+	_, errGet := p.Get(id)
+
+	if errGet != nil {
+		return errGet
+	}
+
+	stmt := "DELETE dealerships WHERE id=?"
+
+	_, err := p.db.Exec(stmt, id)
+
+	return err
 }

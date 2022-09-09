@@ -1,13 +1,12 @@
 package carservice
 
 import (
-	"net/http"
-
 	"github.com/brenos/qap/internal/core/domain"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-func (service service) Create(c *gin.Context) {
+func (service service) Update(c *gin.Context) {
 	carRequest, err := domain.FromJSONCarRequest(c.Request.Body)
 
 	if err != nil {
@@ -15,14 +14,14 @@ func (service service) Create(c *gin.Context) {
 		return
 	}
 
-	err = service.usecase.Create(carRequest)
+	err = service.usecase.Update(carRequest)
 
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
-	response := domain.NewMessageResponse("Car created")
+	response := domain.NewMessageResponse("Car updated")
 
-	c.IndentedJSON(http.StatusCreated, response)
+	c.IndentedJSON(http.StatusOK, response)
 }

@@ -234,15 +234,39 @@ func (p *carPostgreRepo) ListByBrandAndOrModel(brand, model string) ([]domain.Ca
 	return p.list(stmt)
 }
 
-func (p *carPostgreRepo) Create(newCar *domain.Car) (*domain.Car, error) {
+func (p *carPostgreRepo) Create(newCar *domain.Car) error {
 	stmt := "INSERT INTO cars (id, brand, model, fueltype, \"year\", price, iddealership) " +
 		"VALUES(?, ?, ?, ?, ?, ?, ?)"
 
 	_, err := p.db.Exec(stmt, newCar.ID, newCar.Brand, newCar.Model, newCar.FuelType, newCar.Year, newCar.Price, newCar.IdDealerShip)
 
-	if err != nil {
-		return nil, err
+	return err
+}
+
+func (p *carPostgreRepo) Update(car *domain.Car) error {
+	_, errGet := p.Get(car.ID)
+
+	if errGet != nil {
+		return errGet
 	}
 
-	return newCar, nil
+	stmt := "UPDATE cars SET brand=?, model=?, fueltype=?, \"year\"=?, price=?, iddealership=? WHERE id=?"
+
+	_, err := p.db.Exec(stmt, car.Brand, car.Model, car.FuelType, car.Year, car.Price, car.IdDealerShip, car.ID)
+
+	return err
+}
+
+func (p *carPostgreRepo) Delete(id string) error {
+	_, errGet := p.Get(id)
+
+	if errGet != nil {
+		return errGet
+	}
+
+	stmt := "DELETE cars WHERE id=?"
+
+	_, err := p.db.Exec(stmt, id)
+
+	return err
 }

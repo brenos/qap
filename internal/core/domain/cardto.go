@@ -5,7 +5,8 @@ import (
 	"io"
 )
 
-type CreateCarRequest struct {
+type CarRequest struct {
+	ID           string  `json:"id"`
 	Brand        string  `json:"brand"`
 	Model        string  `json:"model"`
 	FuelType     string  `json:"fuelType"`
@@ -14,11 +15,11 @@ type CreateCarRequest struct {
 	IdDealerShip string  `json:"idDealership"`
 }
 
-func FromJSONCreateCarRequest(body io.Reader) (*CreateCarRequest, error) {
-	createCarRequest := CreateCarRequest{}
-	if err := json.NewDecoder(body).Decode(&createCarRequest); err != nil {
+func FromJSONCarRequest(body io.Reader) (*CarRequest, error) {
+	carRequest := CarRequest{}
+	if err := json.NewDecoder(body).Decode(&carRequest); err != nil {
 		return nil, err
 	}
 
-	return &createCarRequest, nil
+	return &carRequest, nil
 }

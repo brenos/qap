@@ -5,18 +5,19 @@ import (
 	"io"
 )
 
-type CreateDealershipRequest struct {
+type DealershipRequest struct {
+	ID      string `json:"id"`
 	Name    string `json:"name"`
 	Address string `json:"address"`
 	State   string `json:"state"`
 	Country string `json:"country"`
 }
 
-func FromJSONCreateDealershipRequest(body io.Reader) (*CreateDealershipRequest, error) {
-	createDealershipRequest := CreateDealershipRequest{}
-	if err := json.NewDecoder(body).Decode(&createDealershipRequest); err != nil {
+func FromJSONDealershipRequest(body io.Reader) (*DealershipRequest, error) {
+	dealershipRequest := DealershipRequest{}
+	if err := json.NewDecoder(body).Decode(&dealershipRequest); err != nil {
 		return nil, err
 	}
 
-	return &createDealershipRequest, nil
+	return &dealershipRequest, nil
 }

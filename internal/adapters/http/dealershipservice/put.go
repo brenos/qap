@@ -1,13 +1,12 @@
 package dealershipservice
 
 import (
-	"net/http"
-
 	"github.com/brenos/qap/internal/core/domain"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-func (service service) Create(c *gin.Context) {
+func (service service) Update(c *gin.Context) {
 	dealershipRequest, err := domain.FromJSONDealershipRequest(c.Request.Body)
 
 	if err != nil {
@@ -15,14 +14,14 @@ func (service service) Create(c *gin.Context) {
 		return
 	}
 
-	err = service.usecase.Create(dealershipRequest)
+	err = service.usecase.Update(dealershipRequest)
 
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
-	response := domain.NewMessageResponse("Dealership created")
+	response := domain.NewMessageResponse("Dealership updated")
 
-	c.IndentedJSON(http.StatusCreated, response)
+	c.IndentedJSON(http.StatusOK, response)
 }
