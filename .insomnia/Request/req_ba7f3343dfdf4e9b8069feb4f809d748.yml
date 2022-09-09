@@ -1,7 +1,7 @@
 _id: req_ba7f3343dfdf4e9b8069feb4f809d748
 type: Request
 parentId: fld_87bf7542f70d4b3383df0542b5b32147
-modified: 1662658275289
+modified: 1662744099513
 created: 1662658217148
 url: "{{ _.url }}/api/dealership"
 name: Get Dealership By ID
@@ -11,7 +11,7 @@ body: {}
 parameters:
   - id: pair_ccffd2911c51403ab2821a4b12ecb469
     name: id
-    value: 98DE1CB4-D881-1BA6-86AD-665CEB2186E8
+    value: a1cdb055-7b73-47c9-b7a5-e8e3c7ee1ad6
     description: ""
     disabled: false
 headers: []

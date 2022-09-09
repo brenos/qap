@@ -1,7 +1,7 @@
 _id: req_449737d362564555b1b097b93b7d3d84
 type: Request
 parentId: fld_ff6963ff2d3b4ed0b0b2b9e8a0605eca
-modified: 1662647913654
+modified: 1662744259939
 created: 1662645310911
 url: "{{ _.url }}/api/car"
 name: Get Car By ID
@@ -11,7 +11,7 @@ body: {}
 parameters:
   - id: pair_ccffd2911c51403ab2821a4b12ecb469
     name: id
-    value: 8f997cbc-e4c4-4350-b150-63a9fd3ae1ee
+    value: 7c282e08-0dd8-4a54-b010-cbbcf7d52beb
     description: ""
     disabled: false
 headers: []

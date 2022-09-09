@@ -1,0 +1,34 @@
+_id: req_385321769e624ed5a1ce92262fbb072b
+type: Request
+parentId: fld_ff6963ff2d3b4ed0b0b2b9e8a0605eca
+modified: 1662744296174
+created: 1662723534081
+url: "{{ _.url }}/api/car"
+name: Create Car
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"brand": "Clio",
+    	"model": "Renault",
+    	"fuelType": "diesel",
+    	"year": 2019,
+    	"price": 11500,
+    	"idDealership": "98DE1CB4-D881-1BA6-86AD-665CEB2186E8"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_ae7a44ae57d64fe2acd10ddb5c3ba2b7
+authentication: {}
+metaSortKey: -1662723750813
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

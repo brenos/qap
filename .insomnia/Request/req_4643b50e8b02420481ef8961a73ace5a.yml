@@ -1,0 +1,21 @@
+_id: req_4643b50e8b02420481ef8961a73ace5a
+type: Request
+parentId: fld_87bf7542f70d4b3383df0542b5b32147
+modified: 1662744112975
+created: 1662723914488
+url: "{{ _.url }}/api/dealership/a1cdb055-7b73-47c9-b7a5-e8e3c7ee1ad6"
+name: Delete Dealership
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1662723914488
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

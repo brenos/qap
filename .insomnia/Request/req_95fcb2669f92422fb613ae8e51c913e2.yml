@@ -1,7 +1,7 @@
 _id: req_95fcb2669f92422fb613ae8e51c913e2
 type: Request
 parentId: fld_87bf7542f70d4b3383df0542b5b32147
-modified: 1662658755316
+modified: 1662743986361
 created: 1662658217196
 url: "{{ _.url }}/api/dealership"
 name: Get Dealerships By Country And/Or State
@@ -11,7 +11,7 @@ body: {}
 parameters:
   - id: pair_5e3b72bc01874038935f3c75dd0a46f3
     name: country
-    value: Brazil
+    value: Portugal
     description: ""
   - id: pair_fb4014ff486444b6af049ed1b2ab24a8
     name: state

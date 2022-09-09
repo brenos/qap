@@ -1,0 +1,35 @@
+_id: req_89f0937cceec4dcda85fa46c1571eb5c
+type: Request
+parentId: fld_ff6963ff2d3b4ed0b0b2b9e8a0605eca
+modified: 1662744297564
+created: 1662723716131
+url: "{{ _.url }}/api/car"
+name: Update Car
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"id": "7c282e08-0dd8-4a54-b010-cbbcf7d52beb",
+    	"brand": "Brand Updated",
+    	"model": "Renault",
+    	"fuelType": "diesel",
+    	"year": 2019,
+    	"price": 11500,
+    	"idDealership": "4BA32294-91CC-6B13-8073-BCA8E018ECC5"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_278d31d7f3604dfb8676aca763907729
+authentication: {}
+metaSortKey: -1662723750788
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
