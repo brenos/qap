@@ -1,0 +1,32 @@
+_id: req_e986d402da9c427e9be50ecde2537558
+type: Request
+parentId: fld_87bf7542f70d4b3383df0542b5b32147
+modified: 1662744038305
+created: 1662723781056
+url: "{{ _.url }}/api/dealership"
+name: Ceate Dealership
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Teste",
+    	"address": "Rua Teste",
+    	"state": "Braga",
+    	"country": "Portugal"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_d5cd8b3f0eb44fde87d379ddb1068722
+authentication: {}
+metaSortKey: -1662723914538
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

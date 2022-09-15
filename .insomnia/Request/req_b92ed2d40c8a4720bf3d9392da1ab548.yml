@@ -1,0 +1,33 @@
+_id: req_b92ed2d40c8a4720bf3d9392da1ab548
+type: Request
+parentId: fld_87bf7542f70d4b3383df0542b5b32147
+modified: 1662744086484
+created: 1662723877699
+url: "{{ _.url }}/api/dealership"
+name: Update Dealership
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"id": "a1cdb055-7b73-47c9-b7a5-e8e3c7ee1ad6",
+    	"name": "Teste Update",
+    	"address": "Rua Teste Update",
+    	"state": "State Update",
+    	"country": "Country Update"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_fc0e2907fa4745e7bbf8aadcb3683a1f
+authentication: {}
+metaSortKey: -1662723914513
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
