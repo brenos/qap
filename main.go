@@ -33,13 +33,13 @@ func main() {
 	carGroup.GET("/", carService.GetProxy)
 	carGroup.POST("/", carService.Create)
 	carGroup.PUT("/", carService.Update)
-	carGroup.DELETE("/", carService.Delete)
+	carGroup.DELETE("/:id", carService.Delete)
 
 	dealershipGroup := api.Group("/dealership")
 	dealershipGroup.GET("/", dealershipService.GetProxy)
 	dealershipGroup.POST("/", dealershipService.Create)
 	dealershipGroup.PUT("/", dealershipService.Update)
-	dealershipGroup.DELETE("/", dealershipService.Delete)
+	dealershipGroup.DELETE("/:id", dealershipService.Delete)
 
 	r.Run()
 }
