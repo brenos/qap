@@ -95,10 +95,10 @@ type dealershipPostgreRepo struct {
 	carRepository portsCar.CarRepository
 }
 
-func NewDealershipPostgreRepo(db *sql.DB, carRepository portsCar.CarRepository) ports.DealershipRepository {
+func NewDealershipPostgreRepo(db *sql.DB, carRepository *portsCar.CarRepository) ports.DealershipRepository {
 	return &dealershipPostgreRepo{
 		db:            db,
-		carRepository: carRepository,
+		carRepository: *carRepository,
 	}
 }
 
@@ -191,14 +191,23 @@ func (p *dealershipPostgreRepo) ListByCountryAndState(country, state string) ([]
 	return p.list(stmt)
 }
 
-func (p *dealershipPostgreRepo) Create(newDealership *domain.Dealership) (*domain.Dealership, error) {
-	stmt := "INSERT INTO dealerships (id, name, address, state, country) " +
-		"VALUES(?, ?, ?, ?, ?)"
+func (p *dealershipPostgreRepo) Create(newDealership *domain.Dealership) error {
+	stmt := "INSERT INTO dealerships (id, name, address, state, country) VALUES($1, $2, $3, $4, $5)"
 	_, err := p.db.Exec(stmt, newDealership.ID, newDealership.Name, newDealership.Address, newDealership.State, newDealership.Country)
 
-	if err != nil {
-		return nil, err
-	}
+	return err
+}
 
-	return newDealership, nil
+func (p *dealershipPostgreRepo) Update(dealership *domain.Dealership) error {
+	stmt := "UPDATE dealerships SET name=$1, address=$2, state=$3, country=$4 WHERE id=$5"
+	_, err := p.db.Exec(stmt, dealership.Name, dealership.Address, dealership.State, dealership.Country, dealership.ID)
+
+	return err
+}
+
+func (p *dealershipPostgreRepo) Delete(id string) error {
+	stmt := "DELETE FROM dealerships WHERE id=$1"
+	_, err := p.db.Exec(stmt, id)
+
+	return err
 }

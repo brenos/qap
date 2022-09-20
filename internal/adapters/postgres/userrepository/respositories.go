@@ -59,9 +59,21 @@ func NewUserPostgreRepo(db *sql.DB) ports.UserRepository {
 	}
 }
 
-func (p *userPostgreRepo) Get(id string) (*domain.User, error) {
+func (p *userPostgreRepo) Create(newUser *domain.User) (*domain.User, error) {
+	sqlS := "INSERT INTO users (id, email, \"token\", ispaiduser, requestsqtt) VALUES ($1, $2, $3, $4, $5)"
+
+	_, err := p.db.Exec(sqlS, newUser.ID, newUser.Email, newUser.Token, newUser.IsPaidUser, newUser.RequestQtt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return newUser, nil
+}
+
+func (p *userPostgreRepo) GetByEmail(email string) (*domain.User, error) {
 	var user userPostgre = userPostgre{}
-	sqsS := fmt.Sprintf("SELECT id, email, token, ispaiduser, requestsqtt FROM users WHERE id = '%s'", id)
+	sqsS := fmt.Sprintf("SELECT id, email, token, ispaiduser, requestsqtt FROM users WHERE email = '%s'", email)
 
 	result := p.db.QueryRow(sqsS)
 	if result.Err() != nil {
@@ -75,40 +87,26 @@ func (p *userPostgreRepo) Get(id string) (*domain.User, error) {
 	return user.ToDomain(), nil
 }
 
-func (p *userPostgreRepo) List() ([]domain.User, error) {
-	var users userListPostgre
-	sqsS := "SELECT id, email, token, ispaiduser, requestsqtt FROM users"
+func (p *userPostgreRepo) GetByToken(token string) (*domain.User, error) {
+	var user userPostgre = userPostgre{}
+	sqsS := fmt.Sprintf("SELECT id, email, token, ispaiduser, requestsqtt FROM users WHERE token = '%s'", token)
 
-	result, err := p.db.Query(sqsS)
-	if err != nil {
-		return nil, err
-	}
-
+	result := p.db.QueryRow(sqsS)
 	if result.Err() != nil {
 		return nil, result.Err()
 	}
 
-	for result.Next() {
-		user := userPostgre{}
-
-		if err := result.Scan(&user.ID, &user.Email, &user.Token, &user.IsPaidUser, &user.RequestQtt); err != nil {
-			return nil, err
-		}
-
-		users = append(users, user)
-	}
-
-	return users.ToDomain(), nil
-}
-
-func (p *userPostgreRepo) Create(newUser *domain.User) (*domain.User, error) {
-	sqlS := "INSERT INTO users (id, email, token, ispaiduser, requestsqtt) VALUES (?, ?, ?, ?, ?)"
-
-	_, err := p.db.Exec(sqlS, newUser.ID, newUser.Email, newUser.Token, newUser.IsPaidUser, newUser.RequestQtt)
-
-	if err != nil {
+	if err := result.Scan(&user.ID, &user.Email, &user.Token, &user.IsPaidUser, &user.RequestQtt); err != nil {
 		return nil, err
 	}
 
-	return newUser, nil
+	return user.ToDomain(), nil
+}
+
+func (p *userPostgreRepo) UpdateRequestCount(token string) error {
+	sqsS := "UPDATE public.users SET requestsqtt=(select requestsqtt+1 from users where token=$1) WHERE token=$2"
+
+	_, err := p.db.Exec(sqsS, token, token)
+
+	return err
 }

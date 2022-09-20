@@ -11,7 +11,7 @@ import (
 )
 
 // ConfigProductDI return a ProductService abstraction with dependency injection configuration
-func ConfigDealershipDI(conn *sql.DB, carRepository portsCar.CarRepository) ports.DealershipService {
+func ConfigDealershipDI(conn *sql.DB, carRepository *portsCar.CarRepository) ports.DealershipService {
 	dealeshipRepository := dealershiprepository.NewDealershipPostgreRepo(conn, carRepository)
 	dealeshipUseCase := usecases.NewDealershipUseCase(dealeshipRepository)
 	dealeshipService := dealershipservice.New(dealeshipUseCase)

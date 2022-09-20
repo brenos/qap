@@ -1,28 +1,27 @@
 package carservice
 
 import (
-	"net/http"
-
 	"github.com/brenos/qap/internal/core/domain"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-func (service service) Create(c *gin.Context) {
-	carRequest, err := domain.FromJSONCreateCarRequest(c.Request.Body)
+func (service service) Update(c *gin.Context) {
+	carRequest, err := domain.FromJSONCarRequest(c.Request.Body)
 
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
-	err = service.usecase.Create(carRequest)
+	err = service.usecase.Update(carRequest)
 
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
-	message := domain.NewResultMessage("Car created!")
+	message := domain.NewResultMessageAndContext("Car updated!", carRequest)
 
-	c.IndentedJSON(http.StatusCreated, message)
+	c.IndentedJSON(http.StatusOK, message)
 }

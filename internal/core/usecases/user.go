@@ -18,25 +18,6 @@ func NewUserUseCase(userRepo ports.UserRepository) ports.UserUseCase {
 	}
 }
 
-func (u *userUserCase) Get(id string) (*domain.User, error) {
-	userGetted, err := u.userRepo.Get(id)
-	if err != nil {
-		log.Panicf("Error getting from repo - %s", err)
-		return nil, err
-	}
-	return userGetted, nil
-}
-
-func (u *userUserCase) List() ([]domain.User, error) {
-	users, err := u.userRepo.List()
-	if err != nil {
-		log.Panicf("Error listing from repo - %s", err)
-		return nil, err
-	}
-
-	return users, nil
-}
-
 func (u *userUserCase) Create(userRequest *domain.CreateUserRequest) (*domain.User, error) {
 	var userId = helpers.RandomUUIDAsString()
 	var token = userId
@@ -49,4 +30,26 @@ func (u *userUserCase) Create(userRequest *domain.CreateUserRequest) (*domain.Us
 	}
 
 	return newUser, nil
+}
+
+func (u *userUserCase) GetByEmail(email string) (*domain.User, error) {
+	userGetted, err := u.userRepo.GetByEmail(email)
+	if err != nil {
+		log.Panicf("Error getting from repo - %s", err)
+		return nil, err
+	}
+	return userGetted, nil
+}
+
+func (u *userUserCase) GetByToken(token string) (*domain.User, error) {
+	userGetted, err := u.userRepo.GetByToken(token)
+	if err != nil {
+		log.Panicf("Error getting from repo - %s", err)
+		return nil, err
+	}
+	return userGetted, nil
+}
+
+func (u *userUserCase) UpdateRequestCount(token string) error {
+	return nil
 }

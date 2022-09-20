@@ -15,12 +15,14 @@ func (service service) Create(c *gin.Context) {
 		return
 	}
 
-	car, err := service.usecase.Create(dealershipRequest)
+	err = service.usecase.Create(dealershipRequest)
 
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
-	c.IndentedJSON(http.StatusCreated, car)
+	message := domain.NewResultMessage("Dealership created!")
+
+	c.IndentedJSON(http.StatusCreated, message)
 }

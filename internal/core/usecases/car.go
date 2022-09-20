@@ -45,15 +45,34 @@ func (c *carUseCase) ListByBrandAndOrModel(brand, model string) ([]domain.Car, e
 	return cars, nil
 }
 
-func (c *carUseCase) Create(carDto *domain.CreateCarRequest) (*domain.Car, error) {
+func (c *carUseCase) Create(carDto *domain.CreateCarRequest) error {
 	var carId = helpers.RandomUUIDAsString()
 	newCar := domain.NewCar(carId, carDto.Brand, carDto.Model, carDto.FuelType, carDto.IdDealerShip, carDto.Year, carDto.Price)
 
-	_, err := c.carRepo.Create(newCar)
+	err := c.carRepo.Create(newCar)
 	if err != nil {
 		log.Panicf("Error creating car from repo - %s", err)
-		return nil, err
 	}
 
-	return newCar, nil
+	return err
+}
+
+func (c *carUseCase) Update(car *domain.Car) error {
+	err := c.carRepo.Update(car)
+
+	if err != nil {
+		log.Panicf("Error updating car from repo - %s", err)
+	}
+
+	return err
+}
+
+func (c *carUseCase) Delete(id string) error {
+	err := c.carRepo.Delete(id)
+
+	if err != nil {
+		log.Panicf("Error deleting car from repo - %s", err)
+	}
+
+	return err
 }

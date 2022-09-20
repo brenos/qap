@@ -6,17 +6,37 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (service service) Get(c *gin.Context) {
-	id := c.Param("id")
+func (service service) GetByEmail(c *gin.Context) {
+	email := c.Param("email")
 
-	if id == "" {
+	if email == "" {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"message": "ID required",
+			"message": "Email required",
 		})
 		return
 	}
 
-	user, err := service.usecase.Get(id)
+	user, err := service.usecase.GetByEmail(email)
+
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, user)
+}
+
+func (service service) GetByToken(c *gin.Context) {
+	token := c.Param("token")
+
+	if token == "" {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"message": "Token required",
+		})
+		return
+	}
+
+	user, err := service.usecase.GetByToken(token)
 
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)

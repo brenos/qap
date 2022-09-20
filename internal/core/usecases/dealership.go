@@ -45,15 +45,32 @@ func (d *dealershipUseCase) ListByCountryAndOrState(country, state string) ([]do
 	return dealerships, nil
 }
 
-func (d *dealershipUseCase) Create(dealershipRequest *domain.CreateDealershipRequest) (*domain.Dealership, error) {
+func (d *dealershipUseCase) Create(dealershipRequest *domain.CreateDealershipRequest) error {
 	var dealershipId = helpers.RandomUUIDAsString()
 	newDealership := domain.NewDealership(dealershipId, dealershipRequest.Name, dealershipRequest.Address, dealershipRequest.State, dealershipRequest.Country)
 
-	_, err := d.dealershipRepo.Create(newDealership)
+	err := d.dealershipRepo.Create(newDealership)
 	if err != nil {
 		log.Panicf("Error creating dealership from repo - %s", err)
-		return nil, err
 	}
 
-	return newDealership, nil
+	return err
+}
+
+func (d *dealershipUseCase) Update(dealership *domain.Dealership) error {
+	err := d.dealershipRepo.Update(dealership)
+
+	if err != nil {
+		log.Panicf("Error updating dealership from repo - %s", err)
+	}
+	return err
+}
+
+func (d *dealershipUseCase) Delete(id string) error {
+	err := d.dealershipRepo.Delete(id)
+
+	if err != nil {
+		log.Panicf("Error deleting dealership from repo - %s", err)
+	}
+	return err
 }
