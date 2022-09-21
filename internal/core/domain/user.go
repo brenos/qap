@@ -4,10 +4,10 @@ import "fmt"
 
 type User struct {
 	ID         string `json:"id"`
-	Email      string `json:"email"`
-	Token      string `json:"token"`
-	IsPaidUser bool   `json:"isPaidUser"`
-	RequestQtt int32  `json:"requestQtt"`
+	Email      string `json:"email,omitempty"`
+	Token      string `json:"token,omitempty"`
+	IsPaidUser bool   `json:"isPaidUser,omitempty"`
+	RequestQtt int32  `json:"requestQtt,omitempty"`
 }
 
 func NewUser(id string, email string, token string, isPaidUser bool, requestQtt int32) *User {

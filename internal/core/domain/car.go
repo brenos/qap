@@ -12,8 +12,8 @@ type Car struct {
 	FuelType     string     `json:"fuelType"`
 	Year         float32    `json:"year"`
 	Price        float32    `json:"price"`
-	IdDealerShip string     `json:"idDealership"`
-	Dealership   Dealership `json:"dealership"`
+	IdDealerShip string     `json:"idDealership,omitempty"`
+	Dealership   Dealership `json:"dealership,omitempty"`
 }
 
 type CleanCar struct {

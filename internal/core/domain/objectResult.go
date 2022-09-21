@@ -1,8 +1,8 @@
 package domain
 
 type Result struct {
-	Message string `json:"message"`
-	Context any    `json:"context"`
+	Message string `json:"message,omitempty"`
+	Context any    `json:"context,omitempty"`
 }
 
 func NewResultMessage(message string) *Result {

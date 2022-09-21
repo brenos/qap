@@ -12,7 +12,7 @@ type Dealership struct {
 	Address string     `json:"address"`
 	State   string     `json:"state"`
 	Country string     `json:"country"`
-	Cars    []CleanCar `json:"cars"`
+	Cars    []CleanCar `json:"cars,omitempty"`
 }
 
 type CleanDealership struct {
