@@ -51,5 +51,9 @@ func (u *userUserCase) GetByToken(token string) (*domain.User, error) {
 }
 
 func (u *userUserCase) UpdateRequestCount(token string) error {
-	return nil
+	err := u.userRepo.UpdateRequestCount(token)
+	if err != nil {
+		log.Panicf("Error on update request count - %s", err)
+	}
+	return err
 }

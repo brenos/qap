@@ -10,10 +10,10 @@ import (
 )
 
 // ConfigProductDI return a ProductService abstraction with dependency injection configuration
-func ConfigUserDI(conn *sql.DB) ports.UserService {
+func ConfigUserDI(conn *sql.DB) (ports.UserService, *ports.UserUseCase) {
 	userRepository := userrepository.NewUserPostgreRepo(conn)
 	userUseCase := usecases.NewUserUseCase(userRepository)
 	userService := userservice.New(userUseCase)
 
-	return userService
+	return userService, &userUseCase
 }

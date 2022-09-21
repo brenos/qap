@@ -6,6 +6,4 @@ import (
 
 type UserService interface {
 	Create(c *gin.Context)
-	GetByEmail(c *gin.Context)
-	GetByToken(c *gin.Context)
 }
