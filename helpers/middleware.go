@@ -5,21 +5,22 @@ import (
 	"net/http"
 
 	"github.com/brenos/qap/internal/core/domain"
+	tokenPorts "github.com/brenos/qap/internal/core/ports/token"
 	userPorts "github.com/brenos/qap/internal/core/ports/user"
 	"github.com/gin-gonic/gin"
 )
 
-func ValidateUserMiddleware(userUseCase userPorts.UserUseCase) gin.HandlerFunc {
+func ValidateTokenMiddleware(userUseCase userPorts.UserUseCase, tokenUseCase tokenPorts.TokenUseCase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
 		if len(token) <= 0 {
-			log.Printf("Token is not sended!")
+			log.Panicln("ERROR | Token is not sended!")
 			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.NewResultMessage("You are not authorized!"))
 			return
 		}
-		user, err := userUseCase.GetByToken(token)
-		if err != nil || user == nil {
-			log.Printf("ERROR | %s", err.Error())
+		isValid := tokenUseCase.VerifyToken(token)
+		if !isValid {
+			log.Panicln("ERROR | Token is not valid")
 			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.NewResultMessage("You are not authorized!"))
 			return
 		}
@@ -27,17 +28,29 @@ func ValidateUserMiddleware(userUseCase userPorts.UserUseCase) gin.HandlerFunc {
 	}
 }
 
-func IncrementRequestCountMiddleware(userUseCase userPorts.UserUseCase) gin.HandlerFunc {
+func ValidateUserAndIncrementRequestCountMiddleware(userUseCase userPorts.UserUseCase, tokenUseCase tokenPorts.TokenUseCase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
 		if len(token) <= 0 {
-			log.Printf("Token is not sended!")
+			log.Panicln("Token is not sended!")
 			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.NewResultMessage("You are not authorized!"))
 			return
 		}
-		err := userUseCase.UpdateRequestCount(token)
+		userId, errToken := tokenUseCase.GetUserIdByToken(token)
+		if errToken != nil {
+			log.Panicf("ERROR | %s", errToken.Error())
+			c.AbortWithStatusJSON(http.StatusInternalServerError, domain.NewResultMessage("Token error!"))
+			return
+		}
+		user, errUser := userUseCase.GetById(userId)
+		if errUser != nil || user == nil {
+			log.Panicf("ERROR | %s", errUser.Error())
+			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.NewResultMessage("You are not authorized!"))
+			return
+		}
+		err := userUseCase.UpdateRequestCount(userId)
 		if err != nil {
-			log.Printf("ERROR | %s", err.Error())
+			log.Panicf("ERROR | %s", err.Error())
 			c.AbortWithStatusJSON(http.StatusInternalServerError, domain.NewResultMessage("We are a error, please try again!"))
 			return
 		}

@@ -5,23 +5,26 @@ import (
 
 	"github.com/brenos/qap/helpers"
 	"github.com/brenos/qap/internal/core/domain"
+	tokenPorts "github.com/brenos/qap/internal/core/ports/token"
 	ports "github.com/brenos/qap/internal/core/ports/user"
 )
 
-type userUserCase struct {
-	userRepo ports.UserRepository
+type userUseCase struct {
+	userRepo     ports.UserRepository
+	tokenUseCase tokenPorts.TokenUseCase
 }
 
-func NewUserUseCase(userRepo ports.UserRepository) ports.UserUseCase {
-	return &userUserCase{
-		userRepo: userRepo,
+func NewUserUseCase(userRepo ports.UserRepository, tokenUseCase tokenPorts.TokenUseCase) ports.UserUseCase {
+	return &userUseCase{
+		userRepo:     userRepo,
+		tokenUseCase: tokenUseCase,
 	}
 }
 
-func (u *userUserCase) Create(userRequest *domain.CreateUserRequest) (*domain.User, error) {
+func (u *userUseCase) Create(userRequest *domain.CreateUserRequest) (*domain.User, error) {
 	var userId = helpers.RandomUUIDAsString()
 	var token = userId
-	newUser := domain.NewUser(userId, userRequest.Email, token, userRequest.IsPaidUser, 0)
+	newUser := domain.NewUser(userId, userRequest.Email, userRequest.IsPaidUser, 0)
 
 	_, err := u.userRepo.Create(newUser)
 	if err != nil {
@@ -29,10 +32,28 @@ func (u *userUserCase) Create(userRequest *domain.CreateUserRequest) (*domain.Us
 		return nil, err
 	}
 
+	token, errToken := u.tokenUseCase.GenerateToken(newUser)
+	if errToken != nil {
+		log.Panicf("Error creating token - %s", errToken)
+		return nil, errToken
+	}
+
+	//send email
+	log.Printf("Token do usuario: %s", token)
+
 	return newUser, nil
 }
 
-func (u *userUserCase) GetByEmail(email string) (*domain.User, error) {
+func (u *userUseCase) GetById(id string) (*domain.User, error) {
+	userGetted, err := u.userRepo.GetById(id)
+	if err != nil {
+		log.Panicf("Error getting from repo - %s", err)
+		return nil, err
+	}
+	return userGetted, nil
+}
+
+func (u *userUseCase) GetByEmail(email string) (*domain.User, error) {
 	userGetted, err := u.userRepo.GetByEmail(email)
 	if err != nil {
 		log.Panicf("Error getting from repo - %s", err)
@@ -41,17 +62,8 @@ func (u *userUserCase) GetByEmail(email string) (*domain.User, error) {
 	return userGetted, nil
 }
 
-func (u *userUserCase) GetByToken(token string) (*domain.User, error) {
-	userGetted, err := u.userRepo.GetByToken(token)
-	if err != nil {
-		log.Panicf("Error getting from repo - %s", err)
-		return nil, err
-	}
-	return userGetted, nil
-}
-
-func (u *userUserCase) UpdateRequestCount(token string) error {
-	err := u.userRepo.UpdateRequestCount(token)
+func (u *userUseCase) UpdateRequestCount(id string) error {
+	err := u.userRepo.UpdateRequestCount(id)
 	if err != nil {
 		log.Panicf("Error on update request count - %s", err)
 	}

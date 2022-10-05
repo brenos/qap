@@ -13,7 +13,8 @@ func main() {
 
 	postgres.RunMigrations()
 
-	userService, userUserCase := di.ConfigUserDI(conn)
+	tokenUseCase := di.ConfigTokenDi()
+	userService, userUserCase := di.ConfigUserDI(conn, tokenUseCase)
 	carService, carRepository := di.ConfigCarDI(conn)
 	dealershipService := di.ConfigDealershipDI(conn, carRepository)
 
@@ -30,8 +31,8 @@ func main() {
 	userGroup.POST("/", userService.Create)
 
 	middlewareGroup := api.Group("/")
-	middlewareGroup.Use(helpers.ValidateUserMiddleware(*userUserCase))
-	middlewareGroup.Use(helpers.IncrementRequestCountMiddleware(*userUserCase))
+	middlewareGroup.Use(helpers.ValidateTokenMiddleware(*userUserCase, *&tokenUseCase))
+	middlewareGroup.Use(helpers.ValidateUserAndIncrementRequestCountMiddleware(*userUserCase, *&tokenUseCase))
 
 	carGroup := middlewareGroup.Group("/car")
 	carGroup.GET("/", carService.GetProxy)

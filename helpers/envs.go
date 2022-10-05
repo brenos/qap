@@ -9,3 +9,11 @@ func URL_DB() string {
 	}
 	return urlDb
 }
+
+func TOKEN_KEY() string {
+	var key = os.Getenv("TOKEN_KEY")
+	if key == "" {
+		key = "1234567890123456"
+	}
+	return key
+}

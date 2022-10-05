@@ -4,7 +4,7 @@ import "github.com/brenos/qap/internal/core/domain"
 
 type UserRepository interface {
 	Create(newUser *domain.User) (*domain.User, error)
+	GetById(id string) (*domain.User, error)
 	GetByEmail(email string) (*domain.User, error)
-	GetByToken(token string) (*domain.User, error)
-	UpdateRequestCount(token string) error
+	UpdateRequestCount(id string) error
 }
