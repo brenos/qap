@@ -17,3 +17,8 @@ func TOKEN_KEY() string {
 	}
 	return key
 }
+
+func TOKEN_EMAIL() string {
+	var key = os.Getenv("TOKEN_EMAIL")
+	return key
+}

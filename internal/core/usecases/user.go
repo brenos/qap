@@ -5,6 +5,7 @@ import (
 
 	"github.com/brenos/qap/helpers"
 	"github.com/brenos/qap/internal/core/domain"
+	emailPorts "github.com/brenos/qap/internal/core/ports/email"
 	tokenPorts "github.com/brenos/qap/internal/core/ports/token"
 	ports "github.com/brenos/qap/internal/core/ports/user"
 )
@@ -12,12 +13,14 @@ import (
 type userUseCase struct {
 	userRepo     ports.UserRepository
 	tokenUseCase tokenPorts.TokenUseCase
+	emailAdapter emailPorts.EmailAdapter
 }
 
-func NewUserUseCase(userRepo ports.UserRepository, tokenUseCase tokenPorts.TokenUseCase) ports.UserUseCase {
+func NewUserUseCase(userRepo ports.UserRepository, tokenUseCase tokenPorts.TokenUseCase, emailAdapter emailPorts.EmailAdapter) ports.UserUseCase {
 	return &userUseCase{
 		userRepo:     userRepo,
 		tokenUseCase: tokenUseCase,
+		emailAdapter: emailAdapter,
 	}
 }
 
@@ -38,8 +41,10 @@ func (u *userUseCase) Create(userRequest *domain.CreateUserRequest) (*domain.Use
 		return nil, errToken
 	}
 
-	//send email
-	log.Printf("Token do usuario: %s", token)
+	errEmail := u.emailAdapter.SendEmail(userRequest.Email, token)
+	if errEmail != nil {
+		return nil, errEmail
+	}
 
 	return newUser, nil
 }
