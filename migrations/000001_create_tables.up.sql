@@ -1,14 +1,12 @@
 CREATE TABLE users (
 	id varchar NOT NULL,
-	email varchar NOT NULL,
-	"token" varchar NOT NULL,
+	email varchar NOT NULL UNIQUE,
 	ispaiduser bool NOT NULL,
 	requestsqtt int4 NOT NULL,
 	CONSTRAINT users_pk PRIMARY KEY (id)
 );
 CREATE INDEX users_email_idx ON public.users USING btree (email);
 CREATE INDEX users_id_idx ON public.users USING btree (id);
-CREATE INDEX users_token_idx ON public.users USING btree (token);
 
 
 CREATE TABLE dealerships (

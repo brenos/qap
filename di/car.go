@@ -2,6 +2,7 @@ package di
 
 import (
 	"database/sql"
+
 	"github.com/brenos/qap/internal/adapters/postgres/carrepository"
 
 	"github.com/brenos/qap/internal/adapters/http/carservice"

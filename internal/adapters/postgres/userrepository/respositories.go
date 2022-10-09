@@ -11,7 +11,6 @@ import (
 type userPostgre struct {
 	ID         string
 	Email      string
-	Token      string
 	IsPaidUser bool
 	RequestQtt int32
 }
@@ -22,7 +21,6 @@ func (p *userPostgre) ToDomain() *domain.User {
 	return &domain.User{
 		ID:         p.ID,
 		Email:      p.Email,
-		Token:      p.Token,
 		IsPaidUser: p.IsPaidUser,
 		RequestQtt: p.RequestQtt,
 	}
@@ -34,7 +32,6 @@ func (p *userPostgre) FromDomain(user *domain.User) {
 
 	p.ID = user.ID
 	p.Email = user.Email
-	p.Token = user.Token
 	p.IsPaidUser = user.IsPaidUser
 	p.RequestQtt = user.RequestQtt
 }
@@ -60,9 +57,9 @@ func NewUserPostgreRepo(db *sql.DB) ports.UserRepository {
 }
 
 func (p *userPostgreRepo) Create(newUser *domain.User) (*domain.User, error) {
-	sqlS := "INSERT INTO users (id, email, \"token\", ispaiduser, requestsqtt) VALUES ($1, $2, $3, $4, $5)"
+	sqlS := "INSERT INTO users (id, email, ispaiduser, requestsqtt) VALUES ($1, $2, $3, $4)"
 
-	_, err := p.db.Exec(sqlS, newUser.ID, newUser.Email, newUser.Token, newUser.IsPaidUser, newUser.RequestQtt)
+	_, err := p.db.Exec(sqlS, newUser.ID, newUser.Email, newUser.IsPaidUser, newUser.RequestQtt)
 
 	if err != nil {
 		return nil, err
@@ -71,42 +68,42 @@ func (p *userPostgreRepo) Create(newUser *domain.User) (*domain.User, error) {
 	return newUser, nil
 }
 
+func (p *userPostgreRepo) GetById(id string) (*domain.User, error) {
+	var user userPostgre = userPostgre{}
+	sqsS := fmt.Sprintf("SELECT id, email, ispaiduser, requestsqtt FROM users WHERE id = '%s'", id)
+
+	result := p.db.QueryRow(sqsS)
+	if result.Err() != nil {
+		return nil, result.Err()
+	}
+
+	if err := result.Scan(&user.ID, &user.Email, &user.IsPaidUser, &user.RequestQtt); err != nil {
+		return nil, err
+	}
+
+	return user.ToDomain(), nil
+}
+
 func (p *userPostgreRepo) GetByEmail(email string) (*domain.User, error) {
 	var user userPostgre = userPostgre{}
-	sqsS := fmt.Sprintf("SELECT id, email, token, ispaiduser, requestsqtt FROM users WHERE email = '%s'", email)
+	sqsS := fmt.Sprintf("SELECT id, email, ispaiduser, requestsqtt FROM users WHERE email = '%s'", email)
 
 	result := p.db.QueryRow(sqsS)
 	if result.Err() != nil {
 		return nil, result.Err()
 	}
 
-	if err := result.Scan(&user.ID, &user.Email, &user.Token, &user.IsPaidUser, &user.RequestQtt); err != nil {
+	if err := result.Scan(&user.ID, &user.Email, &user.IsPaidUser, &user.RequestQtt); err != nil {
 		return nil, err
 	}
 
 	return user.ToDomain(), nil
 }
 
-func (p *userPostgreRepo) GetByToken(token string) (*domain.User, error) {
-	var user userPostgre = userPostgre{}
-	sqsS := fmt.Sprintf("SELECT id, email, token, ispaiduser, requestsqtt FROM users WHERE token = '%s'", token)
+func (p *userPostgreRepo) UpdateRequestCount(id string) error {
+	sqsS := "UPDATE public.users SET requestsqtt=(select requestsqtt+1 from users where id=$1) WHERE id=$2"
 
-	result := p.db.QueryRow(sqsS)
-	if result.Err() != nil {
-		return nil, result.Err()
-	}
-
-	if err := result.Scan(&user.ID, &user.Email, &user.Token, &user.IsPaidUser, &user.RequestQtt); err != nil {
-		return nil, err
-	}
-
-	return user.ToDomain(), nil
-}
-
-func (p *userPostgreRepo) UpdateRequestCount(token string) error {
-	sqsS := "UPDATE public.users SET requestsqtt=(select requestsqtt+1 from users where token=$1) WHERE token=$2"
-
-	_, err := p.db.Exec(sqsS, token, token)
+	_, err := p.db.Exec(sqsS, id, id)
 
 	return err
 }

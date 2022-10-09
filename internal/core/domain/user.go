@@ -9,7 +9,6 @@ import (
 type User struct {
 	ID         string `json:"id"`
 	Email      string `json:"email,omitempty"`
-	Token      string `json:"token,omitempty"`
 	IsPaidUser bool   `json:"isPaidUser,omitempty"`
 	RequestQtt int32  `json:"requestQtt,omitempty"`
 }
@@ -19,11 +18,10 @@ type CreateUserRequest struct {
 	IsPaidUser bool   `json:"isPaidUser"`
 }
 
-func NewUser(id string, email string, token string, isPaidUser bool, requestQtt int32) *User {
+func NewUser(id string, email string, isPaidUser bool, requestQtt int32) *User {
 	return &User{
 		ID:         id,
 		Email:      email,
-		Token:      token,
 		IsPaidUser: isPaidUser,
 		RequestQtt: requestQtt,
 	}
