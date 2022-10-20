@@ -15,14 +15,7 @@ func (service service) Create(c *gin.Context) {
 		return
 	}
 
-	err = service.usecase.Create(carRequest)
-
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	message := domain.NewResultMessage("Car created!")
+	message := service.usecase.Create(carRequest)
 
 	c.IndentedJSON(http.StatusCreated, message)
 }

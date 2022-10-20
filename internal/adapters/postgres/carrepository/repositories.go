@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/brenos/qap/internal/core/domain"
@@ -122,11 +123,14 @@ func (p *carPostgreRepo) Get(id string) (*domain.Car, error) {
 	err := result.Scan(&car.ID, &car.Brand, &car.Model, &car.FuelType, &car.Year, &car.Price,
 		&car.IdDealerShip, &car.Dealership.ID, &car.Dealership.Name, &car.Dealership.Address,
 		&car.Dealership.State, &car.Dealership.Country)
-	if err != nil {
+	switch err {
+	case sql.ErrNoRows:
+		return nil, nil
+	case nil:
+		return car.ToDomain(), nil
+	default:
 		return nil, err
 	}
-
-	return car.ToDomain(), nil
 }
 
 func (p *carPostgreRepo) list(stmt string) ([]domain.Car, error) {
@@ -234,26 +238,42 @@ func (p *carPostgreRepo) ListByBrandAndOrModel(brand, model string) ([]domain.Ca
 	return p.list(stmt)
 }
 
-func (p *carPostgreRepo) Create(newCar *domain.Car) error {
+func (p *carPostgreRepo) Create(newCar *domain.Car) (int64, error) {
 	stmt := "INSERT INTO cars (id, brand, model, fueltype, \"year\", price, iddealership) VALUES($1, $2, $3, $4, $5, $6, $7)"
 
-	_, err := p.db.Exec(stmt, newCar.ID, newCar.Brand, newCar.Model, newCar.FuelType, newCar.Year, newCar.Price, newCar.IdDealerShip)
+	result, err := p.db.Exec(stmt, newCar.ID, newCar.Brand, newCar.Model, newCar.FuelType, newCar.Year, newCar.Price, newCar.IdDealerShip)
 
-	return err
+	rowsInserted, errResult := result.RowsAffected()
+
+	if errResult != nil {
+		log.Panicf("Error on get rows affected - %s", errResult.Error())
+	}
+
+	return rowsInserted, err
 }
 
-func (p *carPostgreRepo) Update(car *domain.Car) error {
+func (p *carPostgreRepo) Update(car *domain.Car) (int64, error) {
 	stmt := "UPDATE cars SET brand=$1, model=$2, fueltype=$3, \"year\"=$4, price=$5, iddealership=$6 WHERE id=$7"
 
-	_, err := p.db.Exec(stmt, car.Brand, car.Model, car.FuelType, car.Year, car.Price, car.IdDealerShip, car.ID)
+	result, err := p.db.Exec(stmt, car.Brand, car.Model, car.FuelType, car.Year, car.Price, car.IdDealerShip, car.ID)
 
-	return err
+	rowsAffected, errResult := result.RowsAffected()
+
+	if errResult != nil {
+		log.Panicf("Error on get rows affected - %s", errResult.Error())
+	}
+	return rowsAffected, err
 }
 
-func (p *carPostgreRepo) Delete(id string) error {
+func (p *carPostgreRepo) Delete(id string) (int64, error) {
 	stmt := "DELETE from cars WHERE id=$1"
 
-	_, err := p.db.Exec(stmt, id)
+	result, err := p.db.Exec(stmt, id)
 
-	return err
+	rowsDeleted, errResult := result.RowsAffected()
+
+	if errResult != nil {
+		log.Panicf("Error on get rows affected - %s", errResult.Error())
+	}
+	return rowsDeleted, err
 }

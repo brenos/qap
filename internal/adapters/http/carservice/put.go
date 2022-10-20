@@ -1,9 +1,10 @@
 package carservice
 
 import (
+	"net/http"
+
 	"github.com/brenos/qap/internal/core/domain"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func (service service) Update(c *gin.Context) {
@@ -14,14 +15,7 @@ func (service service) Update(c *gin.Context) {
 		return
 	}
 
-	err = service.usecase.Update(carRequest)
-
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	message := domain.NewResultMessageAndContext("Car updated!", carRequest)
+	message := service.usecase.Update(carRequest)
 
 	c.IndentedJSON(http.StatusOK, message)
 }

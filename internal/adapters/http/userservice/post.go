@@ -15,12 +15,7 @@ func (service service) Create(c *gin.Context) {
 		return
 	}
 
-	user, err := service.usecase.Create(userRequest)
+	message := service.usecase.Create(userRequest)
 
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.IndentedJSON(http.StatusCreated, user)
+	c.IndentedJSON(http.StatusCreated, message)
 }
