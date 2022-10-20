@@ -27,8 +27,13 @@ func NewUserUseCase(userRepo ports.UserRepository, tokenUseCase tokenPorts.Token
 }
 
 func (u *userUseCase) Create(userRequest *domain.CreateUserRequest) *domain.Result {
+	errValidateEmail := helpers.ValidateEmail(userRequest.Email)
+	if errValidateEmail != nil {
+		log.Println(errValidateEmail)
+		return domain.NewResultMessageAndCode(errValidateEmail, result.CodeInternalError)
+	}
+
 	var userId = helpers.RandomUUIDAsString()
-	var token = userId
 	newUser := domain.NewUser(userId, userRequest.Email, userRequest.IsPaidUser, 0)
 
 	_, err := u.userRepo.Create(newUser)
@@ -45,9 +50,9 @@ func (u *userUseCase) Create(userRequest *domain.CreateUserRequest) *domain.Resu
 		return domain.NewResultMessageAndCode(errTxt, result.CodeInternalError)
 	}
 
-	errEmail := u.emailAdapter.SendEmail(userRequest.Email, token)
-	if errEmail != nil {
-		//remove user
+	errSendEmail := u.emailAdapter.SendEmail(userRequest.Email, token)
+	if errEerrSendEmailmail != nil {
+		Delete(userId)
 		errTxt := fmt.Sprintf("Error creating user")
 		return domain.NewResultMessageAndCode(errTxt, result.CodeInternalError)
 	}
@@ -78,5 +83,15 @@ func (u *userUseCase) UpdateRequestCount(id string) error {
 	if err != nil {
 		log.Panicf("Error on update request count - %s", err)
 	}
+	return err
+}
+
+func (u *userUseCase) Delete(id string) error {
+	rowsDeleted, err := u.userRepo.Delete(id)
+
+	if err != nil {
+		log.Panicf("Error deleting user from repo - %s", err)
+	}
+
 	return err
 }

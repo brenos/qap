@@ -107,3 +107,15 @@ func (p *userPostgreRepo) UpdateRequestCount(id string) error {
 
 	return err
 }
+
+func (p *userPostgreRepo) Delete(id string) (int64, error) {
+	stmt := "DELETE FROM users WHERE id=$1"
+	result, err := p.db.Exec(stmt, id)
+
+	rowsDeleted, errResult := result.RowsAffected()
+
+	if errResult != nil {
+		log.Panicf("Error on delete user - %s", errResult.Error())
+	}
+	return rowsDeleted, err
+}

@@ -7,4 +7,5 @@ type UserRepository interface {
 	GetById(id string) (*domain.User, error)
 	GetByEmail(email string) (*domain.User, error)
 	UpdateRequestCount(id string) error
+	Delete(id string) (int64, error)
 }
