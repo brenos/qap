@@ -1,13 +1,14 @@
 package helpers
 
 import (
-	"bufio" 
-	"os" 
+	"bufio"
+	"errors"
+	"os"
 	"strings"
 )
 
 func ValidateEmail(email string) error {
-	emailSplited := strings.Split(email)
+	emailSplited := strings.Split(email, "@")
 	domainError := validateEmailDomain(emailSplited)
 	if domainError != nil {
 		return domainError
@@ -32,4 +33,5 @@ func validateEmailDomain(domains []string) error {
 	if len(domains) != 2 {
 		return errors.New("Error on email validation!")
 	}
+	return nil
 }

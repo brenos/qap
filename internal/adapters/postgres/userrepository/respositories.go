@@ -3,6 +3,7 @@ package userrepository
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/brenos/qap/internal/core/domain"
 	ports "github.com/brenos/qap/internal/core/ports/user"
@@ -115,7 +116,7 @@ func (p *userPostgreRepo) Delete(id string) (int64, error) {
 	rowsDeleted, errResult := result.RowsAffected()
 
 	if errResult != nil {
-		log.Panicf("Error on delete user - %s", errResult.Error())
+		log.Panicf("Error on get rows deleted - %s", errResult.Error())
 	}
 	return rowsDeleted, err
 }
