@@ -24,10 +24,10 @@ type CleanDealership struct {
 }
 
 type CreateDealershipRequest struct {
-	Name    string `json:"name"`
-	Address string `json:"address"`
-	State   string `json:"state"`
-	Country string `json:"country"`
+	Name    string `json:"name" binding:"required,min=3"`
+	Address string `json:"address" binding:"required,min=3"`
+	State   string `json:"state" binding:"required,min=3"`
+	Country string `json:"country" binding:"required,min=3"`
 }
 
 func NewDealership(id, name, address, state, country string) *Dealership {
@@ -38,15 +38,6 @@ func NewDealership(id, name, address, state, country string) *Dealership {
 		State:   state,
 		Country: country,
 	}
-}
-
-func FromJSONCreateDealershipRequest(body io.Reader) (*CreateDealershipRequest, error) {
-	createDealershipRequest := CreateDealershipRequest{}
-	if err := json.NewDecoder(body).Decode(&createDealershipRequest); err != nil {
-		return nil, err
-	}
-
-	return &createDealershipRequest, nil
 }
 
 func FromJSONDealershipRequest(body io.Reader) (*Dealership, error) {

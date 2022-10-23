@@ -48,8 +48,6 @@ func main() {
 	dealershipGroup.PUT("/", dealershipService.Update)
 	dealershipGroup.DELETE("/:id", dealershipService.Delete)
 
-	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	r.Run()
 }
 

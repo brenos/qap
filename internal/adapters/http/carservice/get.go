@@ -29,14 +29,9 @@ func (service service) get(c *gin.Context, id string) {
 		return
 	}
 
-	car, err := service.usecase.Get(id)
+	message := service.usecase.Get(id)
 
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, car)
+	c.IndentedJSON(http.StatusOK, message)
 }
 
 func (service service) listByDealership(c *gin.Context, idDealership string) {
@@ -46,14 +41,9 @@ func (service service) listByDealership(c *gin.Context, idDealership string) {
 		})
 	}
 
-	cars, err := service.usecase.ListByDealership(idDealership)
+	message := service.usecase.ListByDealership(idDealership)
 
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, cars)
+	c.IndentedJSON(http.StatusOK, message)
 }
 
 func (service service) listByBrandAndOrModel(c *gin.Context, brand, model string) {
@@ -63,12 +53,7 @@ func (service service) listByBrandAndOrModel(c *gin.Context, brand, model string
 		})
 	}
 
-	cars, err := service.usecase.ListByBrandAndOrModel(brand, model)
+	message := service.usecase.ListByBrandAndOrModel(brand, model)
 
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, cars)
+	c.IndentedJSON(http.StatusOK, message)
 }

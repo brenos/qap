@@ -3,24 +3,21 @@ package userservice
 import (
 	"net/http"
 
+	"github.com/brenos/qap/helpers"
 	"github.com/brenos/qap/internal/core/domain"
 	"github.com/gin-gonic/gin"
 )
 
 func (service service) Create(c *gin.Context) {
-	userRequest, err := domain.FromJSONCreateUserRequest(c.Request.Body)
+	userRequest := domain.CreateUserRequest{}
+	resultErr := helpers.ValidateOrCreateBodyRequest(c, &userRequest)
 
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+	if resultErr != nil {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, resultErr)
 		return
 	}
 
-	user, err := service.usecase.Create(userRequest)
+	message := service.usecase.Create(&userRequest)
 
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.IndentedJSON(http.StatusCreated, user)
+	c.IndentedJSON(http.StatusCreated, message)
 }
