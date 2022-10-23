@@ -34,7 +34,7 @@ func (u *userUseCase) Create(userRequest *domain.CreateUserRequest) *domain.Resu
 	}
 
 	var userId = helpers.RandomUUIDAsString()
-	newUser := domain.NewUser(userId, userRequest.Email, userRequest.IsPaidUser, 0)
+	newUser := domain.NewUser(userId, userRequest.Email, false, 0)
 
 	_, err := u.userRepo.Create(newUser)
 	if err != nil {

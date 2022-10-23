@@ -6,7 +6,8 @@ const (
 	CodeUpdated = 202
 	CodeDeleted = 203
 	//Errors Code
-	CodeInternalError = 500
+	CodeUnprocessableEntity = 422
+	CodeInternalError       = 500
 )
 
 func CodeText(code int) string {
@@ -19,6 +20,8 @@ func CodeText(code int) string {
 		return "Updated"
 	case CodeDeleted:
 		return "Deleted"
+	case CodeUnprocessableEntity:
+		return "Unprocessable Entity"
 	case CodeInternalError:
 		return "Internal Error"
 	default:

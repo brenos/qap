@@ -157,7 +157,7 @@ func (p *dealershipPostgreRepo) listByCountry(country string) ([]domain.CleanDea
 		return nil, errors.New("Country is empty")
 	}
 
-	stmt := fmt.Sprintf("SELECT id, \"name\", address, state, country FROM dealerships WHERE country like '%s'", country)
+	stmt := fmt.Sprintf("SELECT id, \"name\", address, state, country FROM dealerships WHERE LOWER(country) like '%s'", country)
 	return p.list(stmt)
 }
 
@@ -166,7 +166,7 @@ func (p *dealershipPostgreRepo) listByState(state string) ([]domain.CleanDealers
 		return nil, errors.New("State is empty")
 	}
 
-	stmt := fmt.Sprintf("SELECT id, \"name\", address, state, country FROM dealerships WHERE state like '%s'", state)
+	stmt := fmt.Sprintf("SELECT id, \"name\", address, state, country FROM dealerships WHERE LOWER(state) like '%s'", state)
 	return p.list(stmt)
 }
 
@@ -182,6 +182,9 @@ func (p *dealershipPostgreRepo) ListByCountryAndState(country, state string) ([]
 		return nil, errors.New("Country and State is empty")
 	}
 
+	country = strings.ToLower(country)
+	state = strings.ToLower(state)
+
 	if countryToCompate == "" {
 		return p.listByState(state)
 	}
@@ -189,7 +192,7 @@ func (p *dealershipPostgreRepo) ListByCountryAndState(country, state string) ([]
 		return p.listByCountry(country)
 	}
 
-	stmt := fmt.Sprintf("SELECT id, \"name\", address, state, country FROM dealerships WHERE country like '%s' AND state like '%s'", country, state)
+	stmt := fmt.Sprintf("SELECT id, \"name\", address, state, country FROM dealerships WHERE LOWER(country) like '%s' AND LOWER(state) like '%s'", country, state)
 	return p.list(stmt)
 }
 

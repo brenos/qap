@@ -26,12 +26,12 @@ type CleanCar struct {
 }
 
 type CreateCarRequest struct {
-	Brand        string  `json:"brand"`
-	Model        string  `json:"model"`
-	FuelType     string  `json:"fuelType"`
-	Year         float32 `json:"year"`
-	Price        float32 `json:"price"`
-	IdDealerShip string  `json:"idDealership"`
+	Brand        string  `json:"brand" binding:"required,min=3"`
+	Model        string  `json:"model" binding:"required,min=3"`
+	FuelType     string  `json:"fuelType" binding:"required,min=3"`
+	Year         float32 `json:"year" binding:"required,gte=1900"`
+	Price        float32 `json:"price" binding:"required,gte=0"`
+	IdDealerShip string  `json:"idDealership" binding:"required"`
 }
 
 func NewCar(id, brand, model, fuelType, idDealership string, year, price float32) *Car {
@@ -53,13 +53,4 @@ func FromJSONCarRequest(body io.Reader) (*Car, error) {
 	}
 
 	return &car, nil
-}
-
-func FromJSONCreateCarRequest(body io.Reader) (*CreateCarRequest, error) {
-	createCarRequest := CreateCarRequest{}
-	if err := json.NewDecoder(body).Decode(&createCarRequest); err != nil {
-		return nil, err
-	}
-
-	return &createCarRequest, nil
 }

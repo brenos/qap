@@ -205,7 +205,7 @@ func (p *carPostgreRepo) listByBrand(brand string) ([]domain.Car, error) {
 	}
 
 	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
-		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.brand like '%s'", brand)
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE LOWER(c.brand) like '%s'", brand)
 	return p.list(stmt)
 }
 
@@ -215,7 +215,7 @@ func (p *carPostgreRepo) listByModel(model string) ([]domain.Car, error) {
 	}
 
 	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
-		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.model like '%s'", model)
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE LOWER(c.model) like '%s'", model)
 	return p.list(stmt)
 }
 
@@ -226,6 +226,9 @@ func (p *carPostgreRepo) ListByBrandAndOrModel(brand, model string) ([]domain.Ca
 		return nil, errors.New("Brand and Model is empty")
 	}
 
+	model = strings.ToLower(model)
+	brand = strings.ToLower(brand)
+
 	if modelToCompare == "" {
 		return p.listByBrand(brand)
 	}
@@ -234,7 +237,7 @@ func (p *carPostgreRepo) ListByBrandAndOrModel(brand, model string) ([]domain.Ca
 	}
 
 	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
-		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.model like '%s' AND c.brand like '%s'", model, brand)
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE LOWER(c.model) like '%s' AND LOWER(c.brand) like '%s'", model, brand)
 	return p.list(stmt)
 }
 

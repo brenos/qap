@@ -1,9 +1,7 @@
 package domain
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 )
 
 type User struct {
@@ -14,8 +12,7 @@ type User struct {
 }
 
 type CreateUserRequest struct {
-	Email      string `json:"email"`
-	IsPaidUser bool   `json:"isPaidUser"`
+	Email string `json:"email" binding:"required,email"`
 }
 
 func NewUser(id string, email string, isPaidUser bool, requestQtt int32) *User {
@@ -29,13 +26,4 @@ func NewUser(id string, email string, isPaidUser bool, requestQtt int32) *User {
 
 func (u *User) String() string {
 	return fmt.Sprintf("%s - %s - Paid: %t", u.ID, u.Email, u.IsPaidUser)
-}
-
-func FromJSONCreateUserRequest(body io.Reader) (*CreateUserRequest, error) {
-	createUserRequest := CreateUserRequest{}
-	if err := json.NewDecoder(body).Decode(&createUserRequest); err != nil {
-		return nil, err
-	}
-
-	return &createUserRequest, nil
 }
