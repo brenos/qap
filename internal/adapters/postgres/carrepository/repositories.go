@@ -3,7 +3,6 @@ package carrepository
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"log"
 	"strings"
 
@@ -112,10 +111,9 @@ func NewCarPostgreRepo(db *sql.DB) ports.CarRepository {
 
 func (p *carPostgreRepo) Get(id string) (*domain.Car, error) {
 	var car carPostgre = carPostgre{}
-	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
-		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.id = '%s'", id)
 
-	result := p.db.QueryRow(stmt)
+	result := p.db.QueryRow("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE c.id = $1", id)
 	if result.Err() != nil {
 		return nil, result.Err()
 	}
@@ -133,10 +131,10 @@ func (p *carPostgreRepo) Get(id string) (*domain.Car, error) {
 	}
 }
 
-func (p *carPostgreRepo) list(stmt string) ([]domain.Car, error) {
+func (p *carPostgreRepo) list(stmt string, args ...any) ([]domain.Car, error) {
 	var cars carListPostgre
 
-	result, err := p.db.Query(stmt)
+	result, err := p.db.Query(stmt, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -162,10 +160,10 @@ func (p *carPostgreRepo) list(stmt string) ([]domain.Car, error) {
 	return cars.ToDomain(), nil
 }
 
-func (p *carPostgreRepo) listClean(stmt string) ([]domain.CleanCar, error) {
+func (p *carPostgreRepo) listClean(stmt string, args ...any) ([]domain.CleanCar, error) {
 	var cars carListPostgre
 
-	result, err := p.db.Query(stmt)
+	result, err := p.db.Query(stmt, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -191,39 +189,38 @@ func (p *carPostgreRepo) listClean(stmt string) ([]domain.CleanCar, error) {
 
 func (p *carPostgreRepo) ListByDealership(idDealership string) ([]domain.CleanCar, error) {
 	if strings.TrimSpace(idDealership) == "" {
-		return nil, errors.New("Dealership ID is empty")
+		return nil, errors.New("dealership ID is empty")
 	}
 
-	stmt := fmt.Sprintf("SELECT id, brand, model, fueltype, \"year\", price "+
-		"FROM cars WHERE iddealership like '%s'", idDealership)
-	return p.listClean(stmt)
+	stmt := "SELECT id, brand, model, fueltype, \"year\", price FROM cars WHERE iddealership like $1"
+	return p.listClean(stmt, idDealership)
 }
 
 func (p *carPostgreRepo) listByBrand(brand string) ([]domain.Car, error) {
 	if strings.TrimSpace(brand) == "" {
-		return nil, errors.New("Brand is empty")
+		return nil, errors.New("brand is empty")
 	}
 
-	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
-		"FROM cars c join dealerships d on c.iddealership = d.id WHERE LOWER(c.brand) like '%s'", brand)
-	return p.list(stmt)
+	stmt := "SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country " +
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE LOWER(c.brand) like $1"
+	return p.list(stmt, brand)
 }
 
 func (p *carPostgreRepo) listByModel(model string) ([]domain.Car, error) {
 	if strings.TrimSpace(model) == "" {
-		return nil, errors.New("Model is empty")
+		return nil, errors.New("model is empty")
 	}
 
-	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
-		"FROM cars c join dealerships d on c.iddealership = d.id WHERE LOWER(c.model) like '%s'", model)
-	return p.list(stmt)
+	stmt := "SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country " +
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE LOWER(c.model) like $1"
+	return p.list(stmt, model)
 }
 
 func (p *carPostgreRepo) ListByBrandAndOrModel(brand, model string) ([]domain.Car, error) {
 	modelToCompare := strings.TrimSpace(model)
 	brandToCompare := strings.TrimSpace(brand)
 	if modelToCompare == "" && brandToCompare == "" {
-		return nil, errors.New("Brand and Model is empty")
+		return nil, errors.New("brand and Model is empty")
 	}
 
 	model = strings.ToLower(model)
@@ -236,9 +233,9 @@ func (p *carPostgreRepo) ListByBrandAndOrModel(brand, model string) ([]domain.Ca
 		return p.listByModel(model)
 	}
 
-	stmt := fmt.Sprintf("SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country "+
-		"FROM cars c join dealerships d on c.iddealership = d.id WHERE LOWER(c.model) like '%s' AND LOWER(c.brand) like '%s'", model, brand)
-	return p.list(stmt)
+	stmt := "SELECT c.id, c.brand, c.model, c.fueltype, c.\"year\", c.price, c.iddealership, d.id, d.\"name\", d.address, d.state, d.country " +
+		"FROM cars c join dealerships d on c.iddealership = d.id WHERE LOWER(c.model) like $1 AND LOWER(c.brand) like $2"
+	return p.list(stmt, model, brand)
 }
 
 func (p *carPostgreRepo) Create(newCar *domain.Car) (int64, error) {

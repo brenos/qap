@@ -2,7 +2,6 @@ package userrepository
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	"github.com/brenos/qap/internal/core/domain"
@@ -15,8 +14,6 @@ type userPostgre struct {
 	IsPaidUser bool
 	RequestQtt int32
 }
-
-type userListPostgre []userPostgre
 
 func (p *userPostgre) ToDomain() *domain.User {
 	return &domain.User{
@@ -35,16 +32,6 @@ func (p *userPostgre) FromDomain(user *domain.User) {
 	p.Email = user.Email
 	p.IsPaidUser = user.IsPaidUser
 	p.RequestQtt = user.RequestQtt
-}
-
-func (p userListPostgre) ToDomain() []domain.User {
-	users := make([]domain.User, len(p))
-	for k, usr := range p {
-		user := usr.ToDomain()
-		users[k] = *user
-	}
-
-	return users
 }
 
 type userPostgreRepo struct {
@@ -71,9 +58,8 @@ func (p *userPostgreRepo) Create(newUser *domain.User) (*domain.User, error) {
 
 func (p *userPostgreRepo) GetById(id string) (*domain.User, error) {
 	var user userPostgre = userPostgre{}
-	sqsS := fmt.Sprintf("SELECT id, email, ispaiduser, requestsqtt FROM users WHERE id = '%s'", id)
 
-	result := p.db.QueryRow(sqsS)
+	result := p.db.QueryRow("SELECT id, email, ispaiduser, requestsqtt FROM users WHERE id = $1", id)
 	if result.Err() != nil {
 		return nil, result.Err()
 	}
@@ -87,9 +73,8 @@ func (p *userPostgreRepo) GetById(id string) (*domain.User, error) {
 
 func (p *userPostgreRepo) GetByEmail(email string) (*domain.User, error) {
 	var user userPostgre = userPostgre{}
-	sqsS := fmt.Sprintf("SELECT id, email, ispaiduser, requestsqtt FROM users WHERE email = '%s'", email)
 
-	result := p.db.QueryRow(sqsS)
+	result := p.db.QueryRow("SELECT id, email, ispaiduser, requestsqtt FROM users WHERE email = $1", email)
 	if result.Err() != nil {
 		return nil, result.Err()
 	}
