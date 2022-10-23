@@ -29,7 +29,7 @@ func isDisposableEmail(domain string) error {
 	for scanner := bufio.NewScanner(f); scanner.Scan(); {
 		if scanner.Text() == domain {
 			f.Close()
-			return errors.New("Email is not valid!")
+			return errors.New("email is not valid")
 		}
 	}
 	f.Close()
@@ -38,7 +38,7 @@ func isDisposableEmail(domain string) error {
 
 func validateEmailDomain(domains []string) error {
 	if len(domains) != 2 {
-		return errors.New("Error on email validation!")
+		return errors.New("error on email validation")
 	}
 	return nil
 }
@@ -57,17 +57,17 @@ func ValidateOrCreateBodyRequest(c *gin.Context, bodyRequest any) *domain.Result
 			out := make([]domain.FieldError, len(ve))
 
 			for i, fe := range ve {
-				out[i] = domain.FieldError{fe.Field(), getFieldErrorMsg(fe)}
+				out[i] = domain.FieldError{Field: fe.Field(), Message: getFieldErrorMsg(fe)}
 			}
 
 			return domain.NewResultMessageContextCode(
-				"",
+				"validation schema error",
 				out,
 				result.CodeUnprocessableEntity,
 			)
 
 		}
-		return domain.NewResultMessageAndCode("Validation schema error!", result.CodeUnprocessableEntity)
+		return domain.NewResultMessageAndCode("validation schema error", result.CodeUnprocessableEntity)
 	}
 	return nil
 }
