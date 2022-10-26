@@ -24,7 +24,6 @@ Swagger
 
 ## Technologies
 - Golang 1.18
-    - Gin
 - Postgre Sql
 - Heroku
 - SendGrid
