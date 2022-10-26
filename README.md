@@ -13,9 +13,11 @@
 Quality Assurance Platform was developed to help IT roles to learn, test and/or use API`s to make a tests for new positions.
 
 ## Status
-v1 - Simple Dealership API`s with Authentication and Authorization
-v2 - Backlog -> User gourps, payment and webSocket server
-v3 - Backlog -> Implements gRPC
+*v1* - Simple Dealership API`s with Authentication and Authorization
+
+*v2* - Backlog -> User gourps, payment and webSocket server
+
+*v3* - Backlog -> Implements gRPC
 
 ## Functionalities
 Swagger
