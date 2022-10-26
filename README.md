@@ -9,16 +9,30 @@
     <img src="https://img.shields.io/badge/tests-passed-brightgreen">
 </p>
 
-## Indice
-* [Description](#Descricao)
+## Description
+Quality Assurance Platform was developed to help IT roles to learn, test and/or use API`s to make a tests for new positions.
 
-## Descricao
 ## Status
-## Funcionalidade e Demonstracao de aplicacao
-## Acesso ao Projeto
-## Tecnologias utilizadas
+v1 - Simple Dealership API`s with Authentication and Authorization
+v2 - Backlog -> User gourps, payment and webSocket server
+v3 - Backlog -> Implements gRPC
+
+## Functionalities
+Swagger
+
+## Technologies
+- Golang 1.18
+    - Gin
+- Postgre Sql
+- Heroku
+- SendGrid
+
 ## Pessoas contribuidoras
+- Dudu
+
 ## Licenca
+Validar sobre MIT
+
 ## Donate
 [![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?business=QBE4BAJYF5NRY&no_recurring=0&item_name=Help+us+keep+this+platform+online&currency_code=BRL)
 
