@@ -1,5 +1,4 @@
 <h1 align="center">
-    <p align="center"> Quality Assurance Platform </p>
     <img alt="Quality Assurance Platform" src="./image/qap_8_bit.png">
 </h1>
 
