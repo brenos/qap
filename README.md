@@ -9,7 +9,7 @@
 </p>
 
 ## Description
-Quality Assurance Platform is a free API's that was developed to help IT roles to learn, test and/or use API's to make a tests for new positions.
+**Quality Assurance Platform** is a free API's that was developed to help IT roles to learn, test and/or use API's to make a tests for new positions.
 
 ## Status
 **v1** - :checkered_flag: FINISHED :checkered_flag: -> Simple Dealership API's with Authentication and Authorization
@@ -38,8 +38,6 @@ Swagger
         </td>
     </tr>
 </table>
-|  |   |
-| :---: | :---: |
 
 ## Licenca
 Validar sobre MIT
