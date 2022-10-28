@@ -29,7 +29,17 @@ Swagger
 - SendGrid
 
 ## Owners
-| [<img src="https://avatars.githubusercontent.com/u/5350132?v=4" width=115><br><sub>Breno Souza</sub>](https://github.com/brenos) |  [<img src="https://avatars.githubusercontent.com/u/36016665?v=4" width=115><br><sub>Luiz Eduardo Martins</sub>](https://github.com/luuizeduardo) |
+<table>
+    <tr>
+        <td align=center>
+            <img src="https://avatars.githubusercontent.com/u/5350132?v=4" width=115><br><a href='https://github.com/brenos'>Breno Souza</a>
+        </td>
+        <td align=center>
+            <img src="https://avatars.githubusercontent.com/u/36016665?v=4" width=115><br><a href='https://github.com/luuizeduardo'>Luiz Eduardo</a>
+        </td>
+    </tr>
+</table>
+|  |   |
 | :---: | :---: |
 
 ## Licenca
