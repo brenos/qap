@@ -20,7 +20,7 @@
 **v3** - :floppy_disk: BACKLOG :floppy_disk: -> Implements gRPC
 
 ## Functionalities
-Swagger
+To look the functionalities, please access the <a href="https://qap-ws.herokuapp.com/swagger/index.html">QAP SWAGGER</a>
 
 ## Technologies
 - Golang 1.18
