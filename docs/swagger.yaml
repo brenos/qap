@@ -1,0 +1,501 @@
+basePath: /api
+definitions:
+  domain.Car:
+    properties:
+      brand:
+        type: string
+      dealership:
+        $ref: '#/definitions/domain.Dealership'
+      fuelType:
+        type: string
+      id:
+        type: string
+      idDealership:
+        type: string
+      model:
+        type: string
+      price:
+        type: number
+      year:
+        type: number
+    type: object
+  domain.CleanCar:
+    properties:
+      brand:
+        type: string
+      fuelType:
+        type: string
+      id:
+        type: string
+      model:
+        type: string
+      price:
+        type: number
+      year:
+        type: number
+    type: object
+  domain.CreateCarRequest:
+    properties:
+      brand:
+        minLength: 3
+        type: string
+      fuelType:
+        minLength: 3
+        type: string
+      idDealership:
+        type: string
+      model:
+        minLength: 3
+        type: string
+      price:
+        minimum: 0
+        type: number
+      year:
+        minimum: 1900
+        type: number
+    required:
+    - brand
+    - fuelType
+    - idDealership
+    - model
+    - price
+    - year
+    type: object
+  domain.CreateDealershipRequest:
+    properties:
+      address:
+        minLength: 3
+        type: string
+      country:
+        minLength: 3
+        type: string
+      name:
+        minLength: 3
+        type: string
+      state:
+        minLength: 3
+        type: string
+    required:
+    - address
+    - country
+    - name
+    - state
+    type: object
+  domain.CreateUserRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  domain.Dealership:
+    properties:
+      address:
+        type: string
+      cars:
+        items:
+          $ref: '#/definitions/domain.CleanCar'
+        type: array
+      country:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      state:
+        type: string
+    type: object
+  domain.Result:
+    properties:
+      code:
+        type: integer
+      context: {}
+      message:
+        type: string
+    type: object
+info:
+  contact:
+    email: soubreno@gmail.com
+    name: Breno
+    url: http://brenos.github.io
+  description: This is a sample server celler server.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Quality Assurance Platform
+  version: "1.0"
+paths:
+  /car:
+    get:
+      consumes:
+      - application/json
+      description: Return cars from DB, by ID, by dealership or by Brand and/or Model.
+      parameters:
+      - description: User token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: car search by id
+        in: query
+        name: id
+        type: string
+      - description: car search by idDealership
+        in: query
+        name: idDealership
+        type: string
+      - description: car search by brand
+        in: query
+        name: brand
+        type: string
+      - description: car search by model
+        in: query
+        name: model
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Return cars from DB
+      tags:
+      - cars
+    post:
+      consumes:
+      - application/json
+      description: Create a car in DB
+      parameters:
+      - description: User token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Car
+        in: body
+        name: car
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CreateCarRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Create a car in DB
+      tags:
+      - cars
+    put:
+      consumes:
+      - application/json
+      description: Update a car in DB
+      parameters:
+      - description: User token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Car
+        in: body
+        name: car
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Car'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Update a car in DB
+      tags:
+      - cars
+  /car/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete car from DB by ID
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Delete car from DB
+      tags:
+      - cars
+  /dealership:
+    get:
+      consumes:
+      - application/json
+      description: Return dealership(s) from DB, by ID, by Country and/or Sate or
+        All Dealerships.
+      parameters:
+      - description: User token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Dealership search by id
+        in: query
+        name: id
+        type: string
+      - description: Dealership search by country
+        in: query
+        name: country
+        type: string
+      - description: Dealership search by state
+        in: query
+        name: state
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Return dealership(s) from DB
+      tags:
+      - dealerships
+    post:
+      consumes:
+      - application/json
+      description: Create a dealership in DB
+      parameters:
+      - description: User token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Dealership
+        in: body
+        name: dealership
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CreateDealershipRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Create a dealership in DB
+      tags:
+      - dealerships
+    put:
+      consumes:
+      - application/json
+      description: Update a dealership in DB
+      parameters:
+      - description: User token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Dealership
+        in: body
+        name: dealership
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Dealership'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Update a dealership in DB
+      tags:
+      - dealerships
+  /dealership/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete dealership from DB by ID
+      parameters:
+      - description: Deslership ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Delete dealership from DB
+      tags:
+      - dealerships
+  /liveness:
+    get:
+      consumes:
+      - application/json
+      description: Indicate that the service is alive
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Service alive
+      tags:
+      - health
+  /readiness:
+    get:
+      consumes:
+      - application/json
+      description: Service able to receive requests
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Service able
+      tags:
+      - health
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Create a user in DB
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/domain.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Result'
+      summary: Create a user in DB
+      tags:
+      - users
+swagger: "2.0"
