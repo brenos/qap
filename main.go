@@ -13,7 +13,7 @@ import (
 
 // @title          Quality Assurance Platform
 // @version        1.0
-// @description    This is a sample server celler server.
+// @description    Free API's that was developed to help IT roles to learn, test and/or use API's to make a tests for new positions
 // @contact.name   Breno
 // @contact.url    http://brenos.github.io
 // @contact.email  soubreno@gmail.com
