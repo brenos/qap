@@ -8,6 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @BasePath /api
+
+// CreateUser godoc
+// @Summary      Create a user in DB
+// @Description  Create a user in DB
+// @Tags users
+// @Accept       json
+// @Produce      json
+// @Param        user body domain.CreateUserRequest true "User"
+// @Success 200 {object} domain.Result
+// @Failure 400 {object} domain.Result
+// @Failure 422 {object} domain.Result
+// @Failure 500 {object} domain.Result
+// @Router       /user [post]
 func (service service) Create(c *gin.Context) {
 	userRequest := domain.CreateUserRequest{}
 	resultErr := helpers.ValidateOrCreateBodyRequest(c, &userRequest)

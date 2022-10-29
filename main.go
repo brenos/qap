@@ -2,12 +2,24 @@ package main
 
 import (
 	"github.com/brenos/qap/di"
+	_ "github.com/brenos/qap/docs"
 	"github.com/brenos/qap/helpers"
 	"github.com/brenos/qap/internal/adapters/postgres"
 	sendgrid "github.com/brenos/qap/internal/adapters/sendGrid"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title          Quality Assurance Platform
+// @version        1.0
+// @description    This is a sample server celler server.
+// @contact.name   Breno
+// @contact.url    http://brenos.github.io
+// @contact.email  soubreno@gmail.com
+// @license.name   MIT
+// @license.url    https://opensource.org/licenses/MIT
+// @BasePath /api
 func main() {
 	conn := postgres.GetDbConnection()
 	defer conn.Close()
@@ -19,22 +31,20 @@ func main() {
 	userService, userUserCase := di.ConfigUserDI(conn, tokenUseCase, emailAdapter)
 	carService, carRepository := di.ConfigCarDI(conn)
 	dealershipService := di.ConfigDealershipDI(conn, carRepository)
+	healthService := di.ConfigHealthDI(conn)
 
 	r := gin.Default()
 
 	api := r.Group("/api")
-	api.GET("/liveness", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "OK",
-		})
-	})
+	api.GET("/liveness", healthService.Liveness)
+	api.GET("/readiness", healthService.Readiness)
 
 	userGroup := api.Group("/user")
 	userGroup.POST("/", userService.Create)
 
 	middlewareGroup := api.Group("/")
-	middlewareGroup.Use(helpers.ValidateTokenMiddleware(*userUserCase, *&tokenUseCase))
-	middlewareGroup.Use(helpers.ValidateUserAndIncrementRequestCountMiddleware(*userUserCase, *&tokenUseCase))
+	middlewareGroup.Use(helpers.ValidateTokenMiddleware(*userUserCase, tokenUseCase))
+	middlewareGroup.Use(helpers.ValidateUserAndIncrementRequestCountMiddleware(*userUserCase, tokenUseCase))
 
 	carGroup := middlewareGroup.Group("/car")
 	carGroup.GET("/", carService.GetProxy)
@@ -47,6 +57,8 @@ func main() {
 	dealershipGroup.POST("/", dealershipService.Create)
 	dealershipGroup.PUT("/", dealershipService.Update)
 	dealershipGroup.DELETE("/:id", dealershipService.Delete)
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run()
 }

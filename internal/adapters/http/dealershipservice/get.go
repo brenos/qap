@@ -6,6 +6,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @BasePath /api
+
+// GetDealership(s) godoc
+// @Summary Return dealership(s) from DB
+// @Schemes
+// @Description Return dealership(s) from DB, by ID, by Country and/or Sate or All Dealerships.
+// @Tags dealerships
+// @Accept json
+// @Produce json
+// @Param       token header string true "User token"
+// @Param       id    query     string  false  "Dealership search by id"
+// @Param       country    query     string  false  "Dealership search by country"
+// @Param       state    query     string  false  "Dealership search by state"
+// @Success 200 {object} domain.Result
+// @Failure 400 {object} domain.Result
+// @Failure 500 {object} domain.Result
+// @Router /dealership [get]
 func (service service) GetProxy(c *gin.Context) {
 	id := c.Request.URL.Query().Get("id")
 	country := c.Request.URL.Query().Get("country")
