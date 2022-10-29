@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server celler server.",
+        "description": "Free API's that was developed to help IT roles to learn, test and/or use API's to make a tests for new positions",
         "title": "Quality Assurance Platform",
         "contact": {
             "name": "Breno",

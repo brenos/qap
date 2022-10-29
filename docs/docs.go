@@ -762,7 +762,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "Quality Assurance Platform",
-	Description:      "This is a sample server celler server.",
+	Description:      "Free API's that was developed to help IT roles to learn, test and/or use API's to make a tests for new positions",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

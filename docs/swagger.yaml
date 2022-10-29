@@ -118,7 +118,8 @@ info:
     email: soubreno@gmail.com
     name: Breno
     url: http://brenos.github.io
-  description: This is a sample server celler server.
+  description: Free API's that was developed to help IT roles to learn, test and/or
+    use API's to make a tests for new positions
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
