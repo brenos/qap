@@ -22,8 +22,15 @@
 ## Functionalities
 To look the functionalities, please access the <a href="https://qap-ws.herokuapp.com/swagger/index.html">QAP SWAGGER</a>
 
+## How to work
+- <a href="https://qap-ws.herokuapp.com/swagger/index.html#/users/post_user">Create user</a> with your email
+  - If your user was created correctly, you receive a **token on your email**
+- Call api`s using you token on header
+
 ## Technologies
-- Golang 1.18
+- Golang 1.19
+  - Gin
+  - Swaggo
 - Postgre Sql
 - Heroku
 - SendGrid
