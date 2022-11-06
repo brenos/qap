@@ -4,13 +4,7 @@
         "description": "Free API's that was developed to help IT roles to learn, test and/or use API's to make a tests for new positions",
         "title": "Quality Assurance Platform",
         "contact": {
-            "name": "Breno",
-            "url": "http://brenos.github.io",
-            "email": "soubreno@gmail.com"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
+            "url": "http://brenos.github.io"
         },
         "version": "1.0"
     },

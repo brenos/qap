@@ -11,13 +11,7 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "Breno",
-            "url": "http://brenos.github.io",
-            "email": "soubreno@gmail.com"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
+            "url": "http://brenos.github.io"
         },
         "version": "{{.Version}}"
     },
