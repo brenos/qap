@@ -27,7 +27,7 @@ Was simulated a car showrooms, following the image:
 To look the functionalities, please access the <a href="https://qap-ws.herokuapp.com/swagger/index.html">QAP SWAGGER</a>
 
 ## How to work
-- <a href="https://qap-ws.herokuapp.com/swagger/index.html#/users/post_user">Create user</a> with your email
+- <a href="https://qap-ws.herokuapp.com/swagger/index.html#/users/post_user" target="_blank">Create user</a> with your email
   - If your user was created correctly, you receive a **token on your email**
 - Call api`s using you token on header
 
