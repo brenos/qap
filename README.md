@@ -10,14 +10,17 @@
 </p>
 
 ## Description
-**Quality Assurance Platform** is a free API's that was developed to help IT roles to learn, test and/or use API's to make a tests for new positions.
+Quality Assurance Platform is a free API's that was developed to help IT roles to learn, test and/or use API's to make a tests for new positions.
+Was simulated a car showrooms, following the image:
+![Screenshot from 2022-11-06 13-43-21](https://user-images.githubusercontent.com/5350132/200174287-31fcfd54-dc43-44ef-8766-de7ff3c506ec.png)
+
 
 ## Status
-**v1** - :checkered_flag: FINISHED :checkered_flag: -> Simple Dealership API's with Authentication and Authorization
+<b> v1 - FINISHED </b> -> Simple Dealership API's with Authentication and Authorization
 
-**v2** - :construction: IN PROGRESS :construction: -> Implements WebSocket server
+<b> v2 - BACKLOG </b> -> Implements WebSocket server
 
-**v3** - :floppy_disk: BACKLOG :floppy_disk: -> Implements gRPC
+<b> v3 -  BACKLOG </b> -> Implements gRPC
 
 ## Functionalities
 To look the functionalities, please access the <a href="https://qap-ws.herokuapp.com/swagger/index.html">QAP SWAGGER</a>
@@ -46,9 +49,6 @@ To look the functionalities, please access the <a href="https://qap-ws.herokuapp
         </td>
     </tr>
 </table>
-
-## Licenca
-Validar sobre MIT
 
 ## Donate
 [![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?business=QBE4BAJYF5NRY&no_recurring=0&item_name=Help+us+keep+this+platform+online&currency_code=BRL)
