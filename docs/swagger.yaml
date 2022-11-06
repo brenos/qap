@@ -115,14 +115,9 @@ definitions:
     type: object
 info:
   contact:
-    email: soubreno@gmail.com
-    name: Breno
     url: http://brenos.github.io
   description: Free API's that was developed to help IT roles to learn, test and/or
     use API's to make a tests for new positions
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
   title: Quality Assurance Platform
   version: "1.0"
 paths:
