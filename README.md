@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-    <img src="https://img.shields.io/static/v1?label=go&message=1.18&color=blue&logo=go">
+    <img src="https://img.shields.io/static/v1?label=go&message=1.19&color=blue&logo=go">
     <img src="https://img.shields.io/badge/version-1.0.0-lightgrey">
     <img src="https://img.shields.io/badge/tests-passed-brightgreen">
 </p>
