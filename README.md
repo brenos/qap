@@ -19,9 +19,13 @@ Was simulated a car showrooms, following the image:
 ## Status
 <b> v1 - FINISHED </b> -> Simple Dealership API's with Authentication and Authorization
 
-<b> v2 - BACKLOG </b> -> Implements WebSocket server
+<b> v2 - BACKLOG </b> -> Implements tests
 
-<b> v3 -  BACKLOG </b> -> Implements gRPC
+<b> v4 -  BACKLOG </b> -> Implements gRPC
+
+<b> v3 - BACKLOG </b> -> Implements WebSocket server
+
+<b> v4 -  BACKLOG </b> -> Implements gRPC
 
 ## Functionalities
 To look the functionalities, please access the <a href="https://qap-ws.herokuapp.com/swagger/index.html">QAP SWAGGER</a>
@@ -38,19 +42,3 @@ To look the functionalities, please access the <a href="https://qap-ws.herokuapp
 - Postgre Sql
 - Heroku
 - SendGrid
-
-## Owners
-<table>
-    <tr>
-        <td align=center>
-            <img src="https://avatars.githubusercontent.com/u/5350132?v=4" width=115><br><a href='https://github.com/brenos'>Breno Souza</a>
-        </td>
-        <td align=center>
-            <img src="https://avatars.githubusercontent.com/u/36016665?v=4" width=115><br><a href='https://github.com/luuizeduardo'>Luiz Eduardo</a>
-        </td>
-    </tr>
-</table>
-
-## Donate
-[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?business=QBE4BAJYF5NRY&no_recurring=0&item_name=Help+us+keep+this+platform+online&currency_code=BRL)
-
